@@ -20,14 +20,14 @@ public class SeedMenuDialog extends AlertDialog {
 			this.mGameView = gameView;
 
 			mSeeders = new ArrayList<Seeder>();
-			
+
 			for (int i = 0; i < FileSeedSource.values.size(); i++) {
 				ArrayList<Seeder> sds = FileSeedSource.values.get(i)
 						.getSeeders();
 				mSeeders.addAll(sds);
 			}
 			Collections.sort(mSeeders);
-			
+
 			mSeederNames = new String[mSeeders.size()];
 			for (int i = 0; i < mSeeders.size(); i++) {
 				mSeederNames[i] = mSeeders.get(i).getName();
@@ -37,7 +37,14 @@ public class SeedMenuDialog extends AlertDialog {
 				public void onClick(DialogInterface dialog, int which) {
 					Seeder seeder;
 					seeder = mSeeders.get(which);
-					mGameView.seed(seeder);
+					AlertDialog.Builder builder = seeder
+							.getSeederDialogBuilder(mContext, mGameView);
+					if (builder != null) {
+						AlertDialog ad = builder.create();
+						ad.show();
+					} else {
+						mGameView.seed(seeder);
+					}
 				}
 			});
 
