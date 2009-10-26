@@ -19,13 +19,14 @@ public abstract class SeederDialog extends AlertDialog {
 
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			mLayout = inflater.inflate(getLayout(), null);
+			setView(mLayout);
 			
 			initViews();	
 			setViews();
 			
-			setView(mLayout);
-
 			setTitle(mSeeder.toString());
+			setIcon(android.R.drawable.ic_dialog_info);
+			
 			setPositiveButton(R.string.ok,
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {

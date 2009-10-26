@@ -44,17 +44,27 @@ public abstract class Seeder implements Comparable<Seeder> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
+		
 		Seeder other = (Seeder) obj;
 		if (name == null) {
 			if (other.name != null)
 				return false;
-		} else if (!name.equals(other.name))
+		}
+		
+		String n1 = name.toLowerCase();
+		String n2 = other.name.toLowerCase();
+		
+		if (!n1.equals(n2))
 			return false;
+		
 		return true;
 	}
 
 	public int compareTo(Seeder other) {
-		return name.compareTo(other.name);
+		String n1 = name.toLowerCase();
+		String n2 = other.name.toLowerCase();
+
+		return n1.compareTo(n2);
 	}
 	
 }

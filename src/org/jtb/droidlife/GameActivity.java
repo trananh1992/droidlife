@@ -174,6 +174,8 @@ public class GameActivity extends Activity implements
 		SeedSource.values = new ArrayList<SeedSource>();
 		SeedSource sl;
 
+		sl = new GeneratedSeedSource();
+		SeedSource.values.add(sl);
 		sl = new Life106AssetSeedSource(getAssets());
 		SeedSource.values.add(sl);
 		sl = new Life106SDCardSeedSource();
