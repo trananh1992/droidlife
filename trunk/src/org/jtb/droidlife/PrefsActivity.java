@@ -20,7 +20,7 @@ public class PrefsActivity extends PreferenceActivity {
 		addPreferencesFromResource(R.layout.prefs);
 
 		mThis = this;
-		setResult(Activity.RESULT_CANCELED);
+		setResult(Activity.RESULT_OK);
 	}
 
 	@Override

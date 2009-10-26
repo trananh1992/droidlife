@@ -5,18 +5,25 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class GameActivity extends Activity {
+public class GameActivity extends Activity implements
+		OnSharedPreferenceChangeListener {
+
 	static final int UPDATE_TYPE_WHAT = 0;
 	static final int UPDATE_GEN_WHAT = 1;
 	static final int UPDATE_POP_WHAT = 2;
@@ -40,6 +47,8 @@ public class GameActivity extends Activity {
 	private TextView mTypeText;
 	private TextView mPopText;
 	private ImageView mStatusImage;
+	private LinearLayout mMainLayout;
+	private Prefs mPrefs;
 
 	private Handler mHandler = new Handler() {
 		@Override
@@ -148,6 +157,13 @@ public class GameActivity extends Activity {
 		mGenText = (TextView) findViewById(R.id.generation_text);
 		mPopText = (TextView) findViewById(R.id.population_text);
 		mStatusImage = (ImageView) findViewById(R.id.status_image);
+		mMainLayout = (LinearLayout) findViewById(R.id.main_layout);
+
+		mPrefs = new Prefs(this);
+
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		prefs.registerOnSharedPreferenceChangeListener(this);
 
 		//
 		// seed sources
@@ -164,7 +180,9 @@ public class GameActivity extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
+
 		mGameView.stop();
+
 	}
 
 	@Override
@@ -202,4 +220,15 @@ public class GameActivity extends Activity {
 		return super.onKeyDown(keyCode, event);
 	}
 
+	public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
+		Log.d(getClass().getSimpleName(), "pref changed:" + key);
+		if (key.equals("keepScreenOn")) {
+			mMainLayout.setKeepScreenOn(mPrefs.isKeepScreenOn());
+		}
+	}
+
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+		}
+	}
 }
