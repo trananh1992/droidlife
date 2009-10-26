@@ -101,4 +101,8 @@ public class Prefs {
 	public int getCellSize() {
 		return getInt("cellSize", 5);
 	}
+	
+	public boolean isKeepScreenOn() {
+		return getBoolean("keepScreenOn", true);
+	}
 }

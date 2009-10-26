@@ -8,8 +8,11 @@
 	<EditTextPreference android:title="Birth Rule"
 		android:summary="String of digits, 1-8. Each digit indicates a # of neighbors resulting in a birth."
 		android:key="birthRule" android:defaultValue="3"/>
-	<EditTextPreference android:title="Survive Neighbors"
+	<EditTextPreference android:title="Survival Rule"
 		android:summary="String of digits, 1-8. Each digit indicates a # of neighbors resulting in survival."
 		android:key="survivalRule" android:defaultValue="23"/>
+	<CheckBoxPreference android:title="Keep Screen On?"
+		android:summary="Keep screen on and run simulation indefinetely?"
+		android:key="keepScreenOn" android:defaultValue="true"/>
 </PreferenceScreen>
 
