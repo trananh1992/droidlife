@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<ListPreference android:title="Grid Size"
+		android:summary="Larger grids increase time to compute generations."
+		android:key="cellSize" android:defaultValue="5"
+		android:entries="@array/size_entries"
+		android:entryValues="@array/size_values" />
+	<EditTextPreference android:title="Birth Rule"
+		android:summary="String of digits, 1-8. Each digit indicates a # of neighbors resulting in a birth."
+		android:key="birthRule" android:defaultValue="3"/>
+	<EditTextPreference android:title="Survive Neighbors"
+		android:summary="String of digits, 1-8. Each digit indicates a # of neighbors resulting in survival."
+		android:key="survivalRule" android:defaultValue="23"/>
+</PreferenceScreen>
+

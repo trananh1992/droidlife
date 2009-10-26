@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:keepScreenOn="true">
+
+	<FrameLayout android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:layout_weight="1">
+		<org.jtb.droidlife.GameView android:id="@+id/game"
+			android:layout_gravity="top" android:layout_width="fill_parent"
+			android:layout_height="fill_parent" />
+	</FrameLayout>
+	<LinearLayout android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:layout_weight="1"
+		android:orientation="horizontal" android:minHeight="48px">
+		<ImageView android:id="@+id/status_image"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:src="@drawable/pause" android:layout_gravity="left|center_vertical"
+			android:layout_weight="1" />
+		<TextView android:id="@+id/type_text" android:gravity="left"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:text="Type:" android:layout_gravity="left|center_horizontal"
+			android:layout_weight="3"/>
+		<TextView android:id="@+id/generation_text" android:text="Gen:"
+			android:gravity="right" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:layout_gravity="right|center_horizontal"
+			android:layout_weight="3" />
+		<TextView android:id="@+id/population_text" android:text="Pop:"
+			android:gravity="right" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:layout_gravity="right|center_horizontal"
+			android:layout_weight="3" />
+	</LinearLayout>
+</LinearLayout>

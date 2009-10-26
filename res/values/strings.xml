@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">DroidLife</string>
+	<string name="menu_play">Play</string>
+	<string name="menu_pause">Pause</string>
+	<string name="menu_seed">Seed</string>
+	<string name="menu_prefs">Preferences</string>
+	<string name="cancel">Cancel</string>
+	<string name="ok">Okay</string>
+	<string name="menu_help">Info / Help</string>
+</resources>
