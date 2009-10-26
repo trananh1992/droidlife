@@ -12,7 +12,7 @@
 		android:summary="String of digits, 1-8. Each digit indicates a # of neighbors resulting in survival."
 		android:key="survivalRule" android:defaultValue="23"/>
 	<CheckBoxPreference android:title="Keep Screen On?"
-		android:summary="Keep screen on and run simulation indefinetely?"
+		android:summary="Keep screen on and run simulation indefinitely?"
 		android:key="keepScreenOn" android:defaultValue="true"/>
 </PreferenceScreen>
 
