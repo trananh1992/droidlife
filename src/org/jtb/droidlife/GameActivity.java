@@ -1,5 +1,7 @@
 package org.jtb.droidlife;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -169,6 +171,7 @@ public class GameActivity extends Activity implements
 		// seed sources
 		//
 
+		SeedSource.values = new ArrayList<SeedSource>();
 		SeedSource sl;
 
 		sl = new Life106AssetSeedSource(getAssets());

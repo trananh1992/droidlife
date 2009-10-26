@@ -13,7 +13,7 @@ import android.content.res.AssetManager;
 import android.util.Log;
 
 public abstract class SeedSource {
-	public static ArrayList<SeedSource> values = new ArrayList<SeedSource>();
+	public static ArrayList<SeedSource> values;
 
 	public abstract ArrayList<Seeder> getSeeders();
 }
