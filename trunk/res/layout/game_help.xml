@@ -7,19 +7,19 @@
 		android:paddingRight="10px">
 		<include layout="@layout/help_header" />
 		<TextView
-			android:text="This is an implementation of Conway's Game of Life, Android style."
+			android:text="Use Menu>Play and Menu>Pause to stop and start generations. Alternatively, use DPad-center to toggle start / stop. To reset, first stop generations then do Menu>Reseed."
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:gravity="center_horizontal" android:textSize="12px"
 			android:paddingTop="10px" />
-		<TextView android:paddingTop="10px"
-			android:text="For more information, see the Wikipedia entry at http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life "
+		<TextView
+			android:text="Use DPad-right to single step (while paused)."
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:gravity="center_horizontal" android:textSize="12px"
-			android:autoLink="web" />
-		<TextView android:paddingTop="10px"
-			android:text="To add seeds, place them into '/sdcard/droidlife/life106' (on your SD card).  Life 1.06 format only. Additional seeds can be downloaded from http://www.conwaylife.com/wiki"
+			android:paddingTop="10px" />
+		<TextView
+			android:text="To reset, first stop generations then do Menu>Reseed."
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:gravity="center_horizontal" android:textSize="12px"
-			android:autoLink="web" />
+			android:paddingTop="10px" />
 	</LinearLayout>
 </ScrollView>

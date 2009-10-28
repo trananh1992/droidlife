@@ -13,8 +13,8 @@ public class RandomSeeder extends Seeder {
 		this.load = load;
 	}
 
-	public RandomSeeder(String name) {
-		super(name);
+	public RandomSeeder(SeedSource seedSource) {
+		super(seedSource, "Random");
 	}
 
 	public void seed(World world) {

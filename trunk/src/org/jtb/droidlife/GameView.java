@@ -16,16 +16,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.TextView;
 
-/**
- * View that draws, takes keystrokes, etc. for a simple LunarLander game.
- * 
- * Has a mode which RUNNING, PAUSED, etc. Has a x, y, dx, dy, ... capturing the
- * current ship physics. All x/y etc. are measured with (0,0) at the lower left.
- * updatePhysics() advances the physics based on realtime. draw() renders the
- * ship, and does an invalidate() to prompt another draw() as soon as possible
- * by the system.
- */
-class GameView extends SurfaceView implements SurfaceHolder.Callback {
+class GameView extends SurfaceView {
 	private class GameThread extends Thread {
 		/** Message handler used by thread to post stuff back to the GameView */
 		private Handler mHandler;
@@ -35,15 +26,12 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		/** Handle to the surface manager object we interact with */
 		private SurfaceHolder mSurfaceHolder;
 
-		private World mWorld;
-
 		public GameThread(SurfaceHolder surfaceHolder, Context context,
-				World world, Handler handler) {
+				Handler handler) {
 
 			mSurfaceHolder = surfaceHolder;
 			mHandler = handler;
 			mContext = context;
-			mWorld = world;
 		}
 
 		@Override
@@ -93,13 +81,12 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	private SurfaceHolder mSurfaceHolder;
 	private Prefs prefs;
 	private Handler mActivityHandler;
-
+	private Seeder mSeeder;
+	
 	public GameView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-
-		SurfaceHolder holder = getHolder();
-		holder.addCallback(this);
-		setFocusable(true); // make sure we get key events
+		
+		setFocusable(true); 
 		prefs = new Prefs(context);
 	}
 
@@ -120,22 +107,11 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	public void onWindowFocusChanged(boolean hasWindowFocus) {
 	}
 
-	/* Callback invoked when the surface dimensions change. */
-	public void surfaceChanged(SurfaceHolder holder, int format, int width,
-			int height) {
+	public void setSize(int width, int height) {
 		mCanvasWidth = width;
-		mCanvasHeight = height;
+		mCanvasHeight = height;		
 	}
-
-	public void surfaceCreated(SurfaceHolder holder) {
-		mSurfaceHolder = holder;
-		refresh();
-	}
-
-	public void surfaceDestroyed(SurfaceHolder holder) {
-		stop();
-	}
-
+	
 	public void stop() {
 		if (thread != null) {
 			// we have to tell thread to shut down & wait for it to finish, or
@@ -161,7 +137,7 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	}
 
 	public void start() {
-		thread = new GameThread(getHolder(), mContext, mWorld, new Handler() {
+		thread = new GameThread(getHolder(), mContext, new Handler() {
 			@Override
 			public void handleMessage(Message m) {
 				// Use for pushing back messages.
@@ -173,15 +149,32 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	}
 
 	public void seed(Seeder seeder) {
+		this.mSeeder = seeder;
+		
 		int cellSize = prefs.getCellSize();
 		int[] birthNeighbors = prefs.getBirthRule();
 		int[] surviveNeighbors = prefs.getSurvivalRule();
 		mWorld = new World(mCanvasWidth / cellSize, mCanvasHeight / cellSize,
 				cellSize, birthNeighbors, surviveNeighbors);
+		mActivityHandler.sendMessage(mActivityHandler.obtainMessage(
+				GameActivity.UPDATE_NAME_WHAT, seeder.getName()));
 		seeder.seed(mWorld);
+		refresh();
+	}
+
+	public void step() {
+		mWorld.generate();
+		refresh();
+	}
+	
+	private void draw() {
 		Canvas c = null;
 		try {
 			c = mSurfaceHolder.lockCanvas(null);
+			if (c == null) {
+				Log.w(getClass().getSimpleName(), "canvas is not ready to draw");
+				return;
+			}
 			synchronized (mSurfaceHolder) {
 				c.drawARGB(255, 0, 0, 0);
 				mWorld.draw(c);
@@ -190,31 +183,14 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback {
 			if (c != null) {
 				mSurfaceHolder.unlockCanvasAndPost(c);
 			}
-		}
-		mActivityHandler.sendMessage(mActivityHandler.obtainMessage(
-				GameActivity.UPDATE_TYPE_WHAT, mWorld.getType()));
-		mActivityHandler.sendMessage(mActivityHandler.obtainMessage(
-				GameActivity.UPDATE_GEN_WHAT, mWorld.getGeneration()));
-		mActivityHandler.sendMessage(mActivityHandler.obtainMessage(
-				GameActivity.UPDATE_POP_WHAT, mWorld.getPopulation()));
+		}		
 	}
-
+	
 	public void refresh() {
 		if (mWorld == null) {
 			return;
 		}
-		Canvas c = null;
-		try {
-			c = mSurfaceHolder.lockCanvas(null);
-			synchronized (mSurfaceHolder) {
-				c.drawARGB(255, 0, 0, 0);
-				mWorld.draw(c);
-			}
-		} finally {
-			if (c != null) {
-				mSurfaceHolder.unlockCanvasAndPost(c);
-			}
-		}
+		draw();
 		mActivityHandler.sendMessage(mActivityHandler.obtainMessage(
 				GameActivity.UPDATE_STATUS_WHAT, isRunning()));
 		mActivityHandler.sendMessage(mActivityHandler.obtainMessage(
@@ -232,4 +208,27 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	public void setActivityHandler(Handler mActivityHandler) {
 		this.mActivityHandler = mActivityHandler;
 	}
+
+	public void setSurfaceHolder(SurfaceHolder mSurfaceHolder) {
+		this.mSurfaceHolder = mSurfaceHolder;
+	}
+	
+	public void save(String name) {
+		SeedSource ss;
+		if (mSeeder == null || !mSeeder.getSeedSource().isWritable()) {
+			ss = new Life106SaveSeedSource();
+		} else {
+			ss = mSeeder.getSeedSource();
+		}
+		
+		if (!ss.isWritable()) {
+			Log.e(getClass().getSimpleName(), "seed is not writable");
+			return;
+		}
+
+
+		ss.writeWorld(name, mWorld);
+		SeederManager.getInstance(mContext).refresh();
+	}
+	
 }

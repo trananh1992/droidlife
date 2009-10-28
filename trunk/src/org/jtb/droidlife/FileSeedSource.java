@@ -12,12 +12,30 @@ import java.util.Random;
 import android.content.res.AssetManager;
 import android.util.Log;
 
-public abstract class FileSeedSource extends SeedSource {	
+public abstract class FileSeedSource extends SeedSource {
 	protected String path;
-	
+
 	public FileSeedSource(String path) {
 		this.path = path;
 	}
+
+	protected abstract String[] getNames();
+	protected abstract Seeder newSeeder(String name);
 	
-	public abstract ArrayList<Seeder> getSeeders();
+	public boolean isWritable() {
+		return true;
+	}
+	
+	public ArrayList<Seeder> getSeeders() {
+		String[] names = getNames();
+		ArrayList<Seeder> seeders = new ArrayList<Seeder>();
+		for (int i = 0; i < names.length; i++) {
+			Seeder seeder = newSeeder(names[i]);
+			seeders.add(seeder);
+		}
+		
+		return seeders;
+	}
+	
+	public abstract Reader getReader(String name);
 }
