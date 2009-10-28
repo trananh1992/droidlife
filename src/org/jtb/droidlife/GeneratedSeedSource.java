@@ -1,18 +1,22 @@
 package org.jtb.droidlife;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class GeneratedSeedSource extends SeedSource {
-	private static ArrayList<Seeder> SEEDERS = new ArrayList<Seeder>();
+	private ArrayList<Seeder> seeders;
 	
-	static {
-		SEEDERS.add(new RandomSeeder("Random"));
+	public GeneratedSeedSource() {
+		seeders = new ArrayList<Seeder>();
+		seeders.add(new RandomSeeder(this));
+		
 	}
 	
-	@Override
 	public ArrayList<Seeder> getSeeders() {
-		return SEEDERS;
+		return seeders;
+	}
+	
+	public boolean isWritable() {
+		return false;
 	}
 
 }

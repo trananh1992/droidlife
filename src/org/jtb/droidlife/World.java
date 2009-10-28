@@ -15,6 +15,23 @@ public class World {
 	private int[] surviveNeighbors;
 	private int generation = 0;
 	private int population = 0;
+	private int cellSize;
+	
+	public void clear() {
+		for (int i = 0; i < cells.length; i++) {
+			for (int j = 0; j < cells[i].length; j++) {
+				cells[i][j].die();
+			}
+		}		
+	}
+	
+	private void init() {
+		for (int i = 0; i < cells.length; i++) {
+			for (int j = 0; j < cells[i].length; j++) {
+				cells[i][j] = new Cell(this, birthNeighbors, surviveNeighbors, i, j, cellSize);
+			}
+		}		
+	}
 	
 	public int getGeneration() {
 		return generation;
@@ -30,6 +47,8 @@ public class World {
 	
 	public World(int xMax, int yMax, int cellSize, int[] birthNeighbors,
 			int[] surviveNeighbors) {
+		this.cellSize = cellSize;
+		
 		cells = new Cell[xMax + 2][yMax + 2];
 		current = new Cell[yMax + 2];
 		previous = new Cell[yMax + 2];
@@ -37,11 +56,7 @@ public class World {
 		this.birthNeighbors = birthNeighbors;
 		this.surviveNeighbors = surviveNeighbors;
 
-		for (int i = 0; i < cells.length; i++) {
-			for (int j = 0; j < cells[i].length; j++) {
-				cells[i][j] = new Cell(this, birthNeighbors, surviveNeighbors, i, j, cellSize);
-			}
-		}
+		init();
 	}
 
 	public void draw(Canvas canvas) {

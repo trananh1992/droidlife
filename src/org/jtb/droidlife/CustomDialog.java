@@ -6,14 +6,14 @@ import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 
-public class InfoDialog extends AlertDialog {
+public class CustomDialog extends AlertDialog {
 
 	public static class Builder extends AlertDialog.Builder {
-		public Builder(Context context) {
+		public Builder(Context context, int layoutId) {
 			super(context);
 			
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			View layout = inflater.inflate(R.layout.info, null);
+			View layout = inflater.inflate(layoutId, null);
 			layout.setMinimumHeight(180);
 			layout.setMinimumWidth(240);
 			setView(layout);
@@ -26,7 +26,7 @@ public class InfoDialog extends AlertDialog {
 		}		
 	}
 	
-	public InfoDialog(Context context) {
+	public CustomDialog(Context context) {
 		super(context);
 	}
 }

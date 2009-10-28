@@ -1,17 +1,25 @@
 package org.jtb.droidlife;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import android.content.Context;
 
 public abstract class Seeder implements Comparable<Seeder> {
-	protected static Random RANDOM = new Random(System.currentTimeMillis());
-
-	protected String name;
+	protected final Random RANDOM = new Random(System.currentTimeMillis());
 	
-	public Seeder(String name) {
+	protected String name;
+	protected SeedSource seedSource;
+	
+	public Seeder(SeedSource seedSource, String name) {
+		this.seedSource = seedSource;
 		this.name = name;
 	}
+	
+	public SeedSource getSeedSource() {
+		return seedSource;
+	}
+	
 	public abstract void seed(World world);
 	
 	public SeederDialog.Builder getSeederDialogBuilder(Context context, GameView gameView) {
