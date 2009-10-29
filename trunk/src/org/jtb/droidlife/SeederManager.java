@@ -39,10 +39,14 @@ public class SeederManager {
 		Collections.sort(seeders);
 	}
 
+	public int getSize() {
+		return seeders.size();
+	}
+	
 	public ArrayList<Seeder> getSeeders() {
 		return seeders;
 	}
-
+	
 	public int getPosition(String name) {
 		for (int i = 0; i < seeders.size(); i++) {
 			Seeder s = seeders.get(i);
@@ -51,5 +55,9 @@ public class SeederManager {
 			}
 		}
 		return -1;
+	}
+	
+	public Seeder getSeeder(int pos) {
+		return seeders.get(pos);
 	}
 }

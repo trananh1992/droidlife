@@ -19,8 +19,7 @@ public class SeederClickDialog extends AlertDialog {
 			this.mActivity = activity;
 			this.mPosition = position;
 
-			Seeder seeder = SeederManager.getInstance(mActivity).getSeeders()
-					.get(mPosition);
+			Seeder seeder = SeederManager.getInstance(mActivity).getSeeder(mPosition);
 			String[] items;
 
 			if (seeder.getSeedSource().isWritable()) {
@@ -37,7 +36,7 @@ public class SeederClickDialog extends AlertDialog {
 			setItems(items, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					Seeder seeder = SeederManager.getInstance(mActivity)
-							.getSeeders().get(mPosition);
+							.getSeeder(mPosition);
 					AlertDialog ad = (AlertDialog) dialog;
 					switch (which) {
 					case 0:

@@ -56,9 +56,9 @@ public class SeedersActivity extends Activity {
 		mSeederList.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
-				Seeder seeder = SeederManager.getInstance(mThis)
-				.getSeeders().get(position);
-			
+				Seeder seeder = SeederManager.getInstance(mThis).getSeeder(
+						position);
+
 				AlertDialog.Builder builder = seeder.getSeederDialogBuilder(
 						mThis, position, GameActivity.class);
 				if (builder != null) {
@@ -161,7 +161,7 @@ public class SeedersActivity extends Activity {
 	void update() {
 		SeederManager.getInstance(this).refresh();
 
-		if (SeederManager.getInstance(this).getSeeders().size() == 0) {
+		if (SeederManager.getInstance(this).getSize() == 0) {
 			mSeederList.setVisibility(View.GONE);
 			mEmptyListText.setVisibility(View.VISIBLE);
 		} else {
