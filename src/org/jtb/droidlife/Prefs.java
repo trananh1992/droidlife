@@ -105,4 +105,16 @@ public class Prefs {
 	public boolean isKeepScreenOn() {
 		return getBoolean("keepScreenOn", true);
 	}
+
+	public boolean isUpgradedTo(int version) {
+		int upgradedTo = getInt("upgradedTo", 0);
+		if (upgradedTo >= version) {
+			return true;
+		}
+		return false;
+	}
+
+	public void setUpgradedTo(int version) {
+		setInt("upgradedTo", version);
+	}
 }

@@ -70,8 +70,8 @@ public class Life106Seeder extends FileSeeder {
 	}
 
 	private void populate(World world) {
-		int xmax = world.cells.length-1;
-		int ymax = world.cells[0].length-1;
+		int xmax = world.cells.length-2;
+		int ymax = world.cells[0].length-2;
 		int xmid = xmax / 2;
 		int ymid = ymax / 2;
 

@@ -1,7 +1,7 @@
 package org.jtb.droidlife;
 
-public class Life106SDCardSeedSource extends SDCardSeedSource {
-	public Life106SDCardSeedSource() {
+public class Life106SeedSource extends SDCardSeedSource {
+	public Life106SeedSource() {
 		super("life106");
 	}
 

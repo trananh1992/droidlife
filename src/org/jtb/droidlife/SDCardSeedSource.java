@@ -12,16 +12,16 @@ import android.util.Log;
 
 public abstract class SDCardSeedSource extends FileSeedSource {
 	protected static final String SDCARD_PREFIX = "/sdcard/droidlife/";
-	
+
 	public SDCardSeedSource(String path) {
 		super(SDCARD_PREFIX + "/" + path);
 	}
-	
+
 	public String[] getNames() {
 		String[] fileNames = new File(path).list();
 		return fileNames;
 	}
-	
+
 	@Override
 	public Reader getReader(String name) {
 		Reader reader = null;
@@ -33,24 +33,33 @@ public abstract class SDCardSeedSource extends FileSeedSource {
 			Log.e(getClass().getSimpleName(), "could not open file: " + f, e);
 		}
 		return reader;
-	}	
-	
-	@Override 
-	public void writeWorld(String name, World world) {
+	}
+
+	@Override
+	public void writeSeed(String name, World world) {
 		Writer w = null;
 		try {
 			File f = new File(path + "/" + name);
 			w = new FileWriter(f);
-			WorldWriter wr = new Life106Writer();
-			wr.write(world, w);			
+			SeedWriter wr = new Life106Writer();
+			wr.write(world, w);
 		} catch (IOException e) {
 			Log.e(getClass().getSimpleName(), "error saving file", e);
 		} finally {
 			try {
-				w.close();
+				if (w != null) {
+					w.close();
+				}
 			} catch (IOException e) {
+				Log.e(getClass().getSimpleName(), "error closing file", e);
 			}
-		}		
+		}
 	}
-	
+
+	@Override
+	public void removeSeed(Seeder seeder) {
+		File f = new File(path + "/" + seeder.getName());
+		f.delete();
+	}
+
 }

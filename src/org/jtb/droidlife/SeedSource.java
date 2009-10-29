@@ -18,7 +18,10 @@ public abstract class SeedSource {
 	public boolean isWritable() {
 		return false;
 	}
-	public void writeWorld(String name, World world) {
+	public void writeSeed(String name, World world) {
+		return;
+	}
+	public void removeSeed(Seeder seeder) {
 		return;
 	}
 }

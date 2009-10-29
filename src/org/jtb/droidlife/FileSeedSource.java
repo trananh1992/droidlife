@@ -20,22 +20,25 @@ public abstract class FileSeedSource extends SeedSource {
 	}
 
 	protected abstract String[] getNames();
+
 	protected abstract Seeder newSeeder(String name);
-	
+
 	public boolean isWritable() {
 		return true;
 	}
-	
+
 	public ArrayList<Seeder> getSeeders() {
 		String[] names = getNames();
 		ArrayList<Seeder> seeders = new ArrayList<Seeder>();
-		for (int i = 0; i < names.length; i++) {
-			Seeder seeder = newSeeder(names[i]);
-			seeders.add(seeder);
+		if (names != null) {
+			for (int i = 0; i < names.length; i++) {
+				Seeder seeder = newSeeder(names[i]);
+				seeders.add(seeder);
+			}
 		}
-		
+
 		return seeders;
 	}
-	
+
 	public abstract Reader getReader(String name);
 }

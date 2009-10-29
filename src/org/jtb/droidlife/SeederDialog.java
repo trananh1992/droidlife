@@ -3,53 +3,66 @@ package org.jtb.droidlife;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 
-public abstract class SeederDialog extends AlertDialog {	
+public abstract class SeederDialog extends AlertDialog {
 	public abstract static class Builder extends AlertDialog.Builder {
-		private GameView mGameView;
-		protected Seeder mSeeder;
 		protected View mLayout;
+		protected Context mContext;
+		protected int mPosition;
+		protected Class mActivityClass;
 		
-		public Builder(Context context, GameView gameView, Seeder seeder) {
+		public Builder(Context context, int position, Class activityClass) {
 			super(context);
-			this.mGameView = gameView;
-			this.mSeeder = seeder;
+			mPosition = position;
+			mContext = context;
+			mActivityClass = activityClass;
+			
+			Seeder seeder = SeederManager.getInstance(mContext).getSeeders()
+					.get(mPosition);
 
-			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater) context
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			mLayout = inflater.inflate(getLayout(), null);
 			setView(mLayout);
-			
-			initViews();	
+
+			initViews();
 			setViews();
-			
-			setTitle(mSeeder.toString());
+
+			setTitle(seeder.toString());
 			setIcon(android.R.drawable.ic_dialog_info);
-			
+
 			setPositiveButton(R.string.ok,
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {
 							setSeeder();
-							mGameView.seed(mSeeder);
+							Intent i = new Intent(mContext,
+									mActivityClass);
+							i.putExtra("org.jtb.droidlife.seeder.position",
+									mPosition);
+							mContext.startActivity(i);
 						}
-					});			
+					});
 			setNegativeButton(R.string.cancel,
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {
 							dialog.dismiss();
 						}
-					});			
-		}		
-		
-		
-		public abstract int getLayout();	
+					});
+		}
+
+		public abstract int getLayout();
+
 		public abstract void initViews();
+
 		public abstract void setViews();
+
 		public abstract void setSeeder();
 	}
-	
+
 	public SeederDialog(Context context) {
-		super(context); 
-	}	
+		super(context);
+	}
 }

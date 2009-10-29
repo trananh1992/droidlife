@@ -7,8 +7,8 @@ public class RandomSeederDialog extends SeederDialog {
 	public static class Builder extends SeederDialog.Builder {
 		private EditText mLoadEdit;
 		
-		public Builder(Context context, GameView gameView, Seeder seeder) {
-			super(context, gameView, seeder);
+		public Builder(Context context, int position, Class activityClass) {
+			super(context, position, activityClass);
 		}		
 		
 		
@@ -21,11 +21,13 @@ public class RandomSeederDialog extends SeederDialog {
 		}
 		
 		public void setViews() {
-			mLoadEdit.setText(Integer.toString(((RandomSeeder)mSeeder).getLoad()));
+			Seeder seeder = SeederManager.getInstance(mContext).getSeeders().get(mPosition);
+			mLoadEdit.setText(Integer.toString(((RandomSeeder)seeder).getLoad()));
 		}
 		
 		public void setSeeder() {
-			((RandomSeeder)mSeeder).setLoad(Integer.parseInt(mLoadEdit.getText().toString()));
+			Seeder seeder = SeederManager.getInstance(mContext).getSeeders().get(mPosition);
+			((RandomSeeder)seeder).setLoad(Integer.parseInt(mLoadEdit.getText().toString()));
 		}
 	}
 	

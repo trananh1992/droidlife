@@ -7,17 +7,7 @@
 		android:paddingRight="10px">
 		<include layout="@layout/help_header" />
 		<TextView
-			android:text="Use Menu>Play and Menu>Pause to stop and start generations. Alternatively, use DPad-center to toggle start / stop."
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:gravity="center_horizontal" android:textSize="12px"
-			android:paddingTop="10px" />
-		<TextView
-			android:text="Use DPad-right to single step (while paused)."
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:gravity="center_horizontal" android:textSize="12px"
-			android:paddingTop="10px" />
-		<TextView
-			android:text="To reset, first stop generations then do Menu>Reseed."
+			android:text="Use DPad-left, right, up, down to move pointer. Use DPad-center to toggle cell."
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:gravity="center_horizontal" android:textSize="12px"
 			android:paddingTop="10px" />

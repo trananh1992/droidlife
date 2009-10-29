@@ -41,18 +41,37 @@ public class SeederClickDialog extends AlertDialog {
 					AlertDialog ad = (AlertDialog) dialog;
 					switch (which) {
 					case 0:
-						Intent i = new Intent(mActivity, GameActivity.class);
-						i.putExtra("org.jtb.droidlife.seeder.position", mPosition);
-						mActivity.startActivity(i);
+						AlertDialog.Builder builder = seeder
+								.getSeederDialogBuilder(mActivity, mPosition,
+										GameActivity.class);
+						if (builder != null) {
+							ad = builder.create();
+							ad.setOwnerActivity(mActivity);
+							ad.show();
+						} else {
+							Intent i = new Intent(mActivity, GameActivity.class);
+							i.putExtra("org.jtb.droidlife.seeder.position",
+									mPosition);
+							mActivity.startActivity(i);
+						}
 						break;
 					case 1:
-						Intent j = new Intent(mActivity, DesignActivity.class);
-						j.putExtra("org.jtb.droidlife.seeder.position", mPosition);
-						j.putExtra("org.jtb.droidlife.seeder.name", seeder
-								.getName());
-						mActivity.startActivity(j);
+						builder = seeder.getSeederDialogBuilder(mActivity,
+								mPosition, DesignActivity.class);
+						if (builder != null) {
+							ad = builder.create();
+							ad.setOwnerActivity(mActivity);
+							ad.show();
+						} else {
+							Intent i = new Intent(mActivity, DesignActivity.class);
+							i.putExtra("org.jtb.droidlife.seeder.position",
+									mPosition);
+							mActivity.startActivity(i);
+						}
 						break;
 					case 2:
+						seeder.remove();
+						mActivity.update();
 						break;
 					}
 				}
