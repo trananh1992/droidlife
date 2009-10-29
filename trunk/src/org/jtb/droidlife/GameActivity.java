@@ -27,7 +27,7 @@ import android.widget.Toast;
 
 public class GameActivity extends Activity implements
 		OnSharedPreferenceChangeListener, SurfaceHolder.Callback {
-	
+
 	private static final int DESIGN_REQUEST = 0;
 
 	static final int UPDATE_TYPE_WHAT = 0;
@@ -50,7 +50,7 @@ public class GameActivity extends Activity implements
 	private AlertDialog mHelpDialog;
 	private AlertDialog mInfoDialog;
 	private AlertDialog mGameEditDialog;
-	
+
 	private GameView mGameView;
 	private Menu mMenu;
 	private TextView mGenText;
@@ -60,9 +60,8 @@ public class GameActivity extends Activity implements
 	private ImageView mStatusImage;
 	private LinearLayout mMainLayout;
 	private Prefs mPrefs;
-	private Seeder mSeeder;
 	private Integer mPosition;
-	
+
 	private Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -164,7 +163,7 @@ public class GameActivity extends Activity implements
 	public void save(String name) {
 		mGameView.save(name);
 	}
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -175,7 +174,7 @@ public class GameActivity extends Activity implements
 		mGameView = (GameView) findViewById(R.id.game);
 		mGameView.setActivityHandler(mHandler);
 		mGameView.getHolder().addCallback(this);
-		
+
 		mTypeText = (TextView) findViewById(R.id.type_text);
 		mGenText = (TextView) findViewById(R.id.generation_text);
 		mPopText = (TextView) findViewById(R.id.population_text);
@@ -190,8 +189,7 @@ public class GameActivity extends Activity implements
 		prefs.registerOnSharedPreferenceChangeListener(this);
 
 		mPosition = savedInstanceState != null ? (Integer) savedInstanceState
-				.get("org.jtb.droidlife.seeder.position")
-				: null;
+				.get("org.jtb.droidlife.seeder.position") : null;
 		if (mPosition == null) {
 			Bundle extras = getIntent().getExtras();
 			mPosition = extras != null ? (Integer) extras
@@ -201,26 +199,14 @@ public class GameActivity extends Activity implements
 			Log.e(getClass().getSimpleName(), "no position passed");
 			return;
 		}
-		mSeeder = SeederManager.getInstance(this).getSeeders().get(mPosition);
-		if (mSeeder == null) {
-			Log.e(getClass().getSimpleName(), "no seeder at position: "
-					+ mPosition);
-			return;
-		}		
 	}
 
 	private void seed() {
-		AlertDialog.Builder builder = mSeeder.getSeederDialogBuilder(this,
-				mGameView);
-		if (builder != null) {
-			AlertDialog ad = builder.create();
-			ad.setOwnerActivity(this);
-			ad.show();
-		} else {
-			mGameView.seed(mSeeder);
-		}		
+		Seeder seeder = SeederManager.getInstance(this).getSeeders().get(
+				mPosition);
+		mGameView.seed(seeder);
 	}
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -279,10 +265,14 @@ public class GameActivity extends Activity implements
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
+		case DESIGN_REQUEST:
+			// ?
+			break;
 		}
 	}
 
-	public void surfaceChanged(SurfaceHolder arg0, int format, int width, int height) {
+	public void surfaceChanged(SurfaceHolder arg0, int format, int width,
+			int height) {
 		mGameView.setSize(width, height);
 		seed();
 	}

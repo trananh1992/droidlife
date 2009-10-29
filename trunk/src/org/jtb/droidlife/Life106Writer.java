@@ -4,11 +4,11 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Writer;
 
-public class Life106Writer extends WorldWriter {
+public class Life106Writer extends SeedWriter {
 	@Override
 	public void write(World world, Writer os) throws IOException {
-		int xmid = world.cells.length / 2;
-		int ymid = world.cells[0].length / 2;
+		int xmid = (world.cells.length-2) / 2;
+		int ymid = (world.cells[0].length-2) / 2;
 		
 		BufferedWriter bw = new BufferedWriter(os);
 		bw.write("#Life 1.06\n");

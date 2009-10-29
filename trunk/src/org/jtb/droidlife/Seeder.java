@@ -22,7 +22,7 @@ public abstract class Seeder implements Comparable<Seeder> {
 	
 	public abstract void seed(World world);
 	
-	public SeederDialog.Builder getSeederDialogBuilder(Context context, GameView gameView) {
+	public SeederDialog.Builder getSeederDialogBuilder(Context context, int position, Class activityClass) {
 		return null;
 	}
 	public void setName(String name) {
@@ -75,4 +75,7 @@ public abstract class Seeder implements Comparable<Seeder> {
 		return n1.compareTo(n2);
 	}
 	
+	public void remove() {
+		seedSource.removeSeed(this);
+	}	
 }

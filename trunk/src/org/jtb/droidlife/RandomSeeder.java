@@ -27,8 +27,9 @@ public class RandomSeeder extends Seeder {
 		}
 	}
 	
-	public SeederDialog.Builder getSeederDialogBuilder(Context context, GameView gameView) {
-		RandomSeederDialog.Builder builder = new RandomSeederDialog.Builder(context, gameView, this);
+	@Override
+	public SeederDialog.Builder getSeederDialogBuilder(Context context, int position, Class activityClass) {
+		RandomSeederDialog.Builder builder = new RandomSeederDialog.Builder(context, position, activityClass);
 		return builder;
 	}
 }

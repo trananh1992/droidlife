@@ -17,8 +17,7 @@ public class SeederManager {
 		this.context = context;
 
 		seedSources = new SeedSource[] { new GeneratedSeedSource(),
-				new Life106SaveSeedSource(), new Life106SDCardSeedSource(),
-				new Life106AssetSeedSource(context.getAssets()) };
+				new Life106SeedSource() };
 
 		refresh();
 	}
@@ -43,7 +42,7 @@ public class SeederManager {
 	public ArrayList<Seeder> getSeeders() {
 		return seeders;
 	}
-	
+
 	public int getPosition(String name) {
 		for (int i = 0; i < seeders.size(); i++) {
 			Seeder s = seeders.get(i);

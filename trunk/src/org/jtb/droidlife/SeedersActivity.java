@@ -27,8 +27,9 @@ public class SeedersActivity extends Activity {
 	private static final int INFO_DIALOG = 2;
 
 	private static final int MENU_NEW = 0;
-	private static final int MENU_HELP = 1;
-	private static final int MENU_INFO = 2;
+	private static final int MENU_PREFS = 1;
+	private static final int MENU_HELP = 2;
+	private static final int MENU_INFO = 3;
 
 	static final int DESIGN_REQUEST = 0;
 
@@ -46,15 +47,29 @@ public class SeedersActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.seeders);
 
+		AssetCopier ac = new AssetCopier(this);
+		ac.copy();
+
 		mThis = this;
 
 		mSeederList = (ListView) findViewById(R.id.seeder_list);
 		mSeederList.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
-				Intent i = new Intent(mThis, GameActivity.class);
-				i.putExtra("org.jtb.droidlife.seeder.position", position);
-				startActivity(i);
+				Seeder seeder = SeederManager.getInstance(mThis)
+				.getSeeders().get(position);
+			
+				AlertDialog.Builder builder = seeder.getSeederDialogBuilder(
+						mThis, position, GameActivity.class);
+				if (builder != null) {
+					AlertDialog ad = builder.create();
+					ad.setOwnerActivity(mThis);
+					ad.show();
+				} else {
+					Intent i = new Intent(mThis, GameActivity.class);
+					i.putExtra("org.jtb.droidlife.seeder.position", position);
+					mThis.startActivity(i);
+				}
 			}
 		});
 		mSeederList.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -84,6 +99,8 @@ public class SeedersActivity extends Activity {
 
 		menu.add(0, MENU_NEW, 0, R.string.menu_new).setIcon(
 				android.R.drawable.ic_menu_add);
+		menu.add(0, MENU_PREFS, 0, R.string.menu_prefs).setIcon(
+				android.R.drawable.ic_menu_preferences);
 		menu.add(0, MENU_HELP, 0, R.string.menu_help).setIcon(
 				android.R.drawable.ic_menu_help);
 		menu.add(0, MENU_INFO, 0, R.string.menu_info).setIcon(
@@ -97,6 +114,10 @@ public class SeedersActivity extends Activity {
 		switch (item.getItemId()) {
 		case MENU_NEW:
 			showDialog(NEW_DIALOG);
+			return true;
+		case MENU_PREFS:
+			Intent i = new Intent(this, PrefsActivity.class);
+			startActivity(i);
 			return true;
 		case MENU_HELP:
 			showDialog(HELP_DIALOG);

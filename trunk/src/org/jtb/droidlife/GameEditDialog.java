@@ -13,7 +13,6 @@ public class GameEditDialog extends AlertDialog {
 	public static class Builder extends AlertDialog.Builder {
 		private GameActivity mActivity;
 		private EditText mNameEdit;
-		private World mWorld;
 
 		public Builder(GameActivity activity) {
 			super(activity);
@@ -23,7 +22,7 @@ public class GameEditDialog extends AlertDialog {
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			View layout = inflater.inflate(R.layout.game_edit_dialog, null);
 			setView(layout);
-			setTitle("Name");
+			setTitle("Seed Name?");
 			setIcon(android.R.drawable.ic_dialog_info);
 
 			mNameEdit = (EditText) layout.findViewById(R.id.name_edit);
@@ -37,7 +36,6 @@ public class GameEditDialog extends AlertDialog {
 									DesignActivity.class);
 							i.putExtra("org.jtb.droidlife.seeder.position",
 									SeederManager.getInstance(mActivity).getPosition(name));
-							i.putExtra("org.jtb.droidlife.seeder.name", name);
 							mActivity.startActivity(i);
 						}
 					});

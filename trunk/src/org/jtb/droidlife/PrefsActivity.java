@@ -26,9 +26,5 @@ public class PrefsActivity extends PreferenceActivity {
 	@Override
 	public void onPause() {
 		super.onPause();
-		
-		Toast.makeText(this,
-				"Preference changes will not take effect until the next seed.",
-				Toast.LENGTH_LONG).show();
 	}
 }

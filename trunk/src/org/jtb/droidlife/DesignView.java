@@ -22,7 +22,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.TextView;
 
-class DesignView extends SurfaceView {
+class DesignView extends SurfaceView implements Seedable {
+	
 	private static Paint POINT_PAINT = new Paint();
 	private static Paint XY_PAINT = new Paint();
 
@@ -212,8 +213,16 @@ class DesignView extends SurfaceView {
 
 	public void save(String name) {
 		SeedSource ss;
-		if (mSeeder == null || !mSeeder.getSeedSource().isWritable()) {
-			ss = new Life106SaveSeedSource();
+		
+		if (mSeeder == null) {
+			ss = new Life106SeedSource();
+		} else if (!mSeeder.getSeedSource().isWritable()) {
+			ss = new Life106SeedSource();
+
+			// we are duplicating a seed from a non-writable source,
+			// qualify the copy with a unique identifier so they
+			// can be distinguished
+			name = new SeedNameQualifier(name).toString();			
 		} else {
 			ss = mSeeder.getSeedSource();
 		}
@@ -223,8 +232,8 @@ class DesignView extends SurfaceView {
 			return;
 		}
 
-
-		ss.writeWorld(name, mWorld);
+		ss.writeSeed(name, mWorld);
 		SeederManager.getInstance(mContext).refresh();
 	}
+	
 }

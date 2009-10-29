@@ -29,12 +29,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class DesignActivity extends Activity implements SurfaceHolder.Callback {
-	static final int UPDATE_X_WHAT = 0;
-	static final int UPDATE_Y_WHAT = 1;
+	private static final int HELP_DIALOG = 0;
+	private static final int INFO_DIALOG = 2;
 
 	private static final int MENU_SIMULATE = 0;
 	private static final int MENU_CLEAR = 1;
+	private static final int MENU_HELP = 2;
+	private static final int MENU_INFO = 3;
 
+	static final int UPDATE_X_WHAT = 0;
+	static final int UPDATE_Y_WHAT = 1;
+
+
+	private static final int SIMULATE_REQUEST = 0;
+	
+	private AlertDialog mHelpDialog;
+	private AlertDialog mInfoDialog;
+	
 	private DesignView mDesignView;
 	private Menu mMenu;
 	private LinearLayout mMainLayout;
@@ -42,7 +53,7 @@ public class DesignActivity extends Activity implements SurfaceHolder.Callback {
 	private TextView mXText;
 	private TextView mYText;
 	private String mName;
-	private Seeder mSeeder = null;
+	private Integer mPosition = null;
 	private TextView mNameText;
 
 	private Handler mHandler = new Handler() {
@@ -70,6 +81,10 @@ public class DesignActivity extends Activity implements SurfaceHolder.Callback {
 				android.R.drawable.ic_menu_share);
 		menu.add(0, MENU_CLEAR, 0, R.string.menu_clear).setIcon(
 				android.R.drawable.ic_menu_close_clear_cancel);
+		menu.add(0, MENU_HELP, 0, R.string.menu_help).setIcon(
+				android.R.drawable.ic_menu_help);
+		menu.add(0, MENU_INFO, 0, R.string.menu_info).setIcon(
+				android.R.drawable.ic_menu_info_details);
 
 		return true;
 	}
@@ -87,11 +102,16 @@ public class DesignActivity extends Activity implements SurfaceHolder.Callback {
 			return true;
 		case MENU_SIMULATE:
 			save();
-			int position = SeederManager.getInstance(this).getPosition(mName);
-
+			mPosition = SeederManager.getInstance(this).getPosition(mName);
 			Intent i = new Intent(this, GameActivity.class);
-			i.putExtra("org.jtb.droidlife.seeder.position", position);
+			i.putExtra("org.jtb.droidlife.seeder.position", mPosition);
 			startActivity(i);
+			return true;
+		case MENU_HELP:
+			showDialog(HELP_DIALOG);
+			return true;
+		case MENU_INFO:
+			showDialog(INFO_DIALOG);
 			return true;
 		}
 
@@ -100,7 +120,6 @@ public class DesignActivity extends Activity implements SurfaceHolder.Callback {
 
 	public void save() {
 		mDesignView.save(mName);
-		setResult(Activity.RESULT_OK);
 	}
 
 	@Override
@@ -120,31 +139,30 @@ public class DesignActivity extends Activity implements SurfaceHolder.Callback {
 
 		mPrefs = new Prefs(this);
 
-		mName = savedInstanceState != null ? (String) savedInstanceState
-				.get("org.jtb.droidlife.seeder.name") : null;
-		if (mName == null) {
-			Bundle extras = getIntent().getExtras();
-			mName = extras != null ? (String) extras
-					.get("org.jtb.droidlife.seeder.name") : null;
-		}
-		if (mName == null) {
-			Log.e(getClass().getSimpleName(), "no name passed");
-			return;
-		}
-		mNameText.setText("Designing: " + mName);
-		
-		Integer pos = savedInstanceState != null ? (Integer) savedInstanceState
+		mPosition = savedInstanceState != null ? (Integer) savedInstanceState
 				.get("org.jtb.droidlife.seeder.position") : null;
-		if (pos == null) {
+		if (mPosition == null) {
 			Bundle extras = getIntent().getExtras();
-			pos = extras != null ? (Integer) extras
+			mPosition = extras != null ? (Integer) extras
 					.get("org.jtb.droidlife.seeder.position") : null;
 		}
-		if (pos != null) {
-			mSeeder = SeederManager.getInstance(this).getSeeders().get(pos);
+		if (mPosition != null) {
+			mName = SeederManager.getInstance(this).getSeeders().get(mPosition)
+					.getName();
+		} else {
+			mName = savedInstanceState != null ? (String) savedInstanceState
+					.get("org.jtb.droidlife.seeder.name") : null;
+			if (mName == null) {
+				Bundle extras = getIntent().getExtras();
+				mName = extras != null ? (String) extras
+						.get("org.jtb.droidlife.seeder.name") : null;
+			}
+			if (mName == null) {
+				Log.e(getClass().getSimpleName(), "no name passed");
+				return;
+			}
 		}
-
-		setResult(Activity.RESULT_CANCELED);
+		mNameText.setText("Designing: " + mName);
 	}
 
 	@Override
@@ -161,6 +179,14 @@ public class DesignActivity extends Activity implements SurfaceHolder.Callback {
 		AlertDialog.Builder builder;
 
 		switch (id) {
+		case HELP_DIALOG:
+			builder = new CustomDialog.Builder(this, R.layout.design_help);
+			mHelpDialog = builder.create();
+			return mHelpDialog;
+		case INFO_DIALOG:
+			builder = new CustomDialog.Builder(this, R.layout.info);
+			mInfoDialog = builder.create();
+			return mInfoDialog;
 		}
 
 		return null;
@@ -195,10 +221,23 @@ public class DesignActivity extends Activity implements SurfaceHolder.Callback {
 		}
 	}
 
+	private void seed() {
+		AlertDialog.Builder builder = null;
+		Seeder seeder = null;
+
+		if (mPosition != null) {
+			seeder = SeederManager.getInstance(this).getSeeders()
+					.get(mPosition);
+			mDesignView.seed(seeder);
+		} else {
+			mDesignView.seed(null);
+		}
+	}
+	
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
 		mDesignView.setSize(width, height);
-		mDesignView.seed(mSeeder);
+		seed();
 	}
 
 	public void surfaceCreated(SurfaceHolder holder) {
