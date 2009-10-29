@@ -40,12 +40,11 @@ public class DesignActivity extends Activity implements SurfaceHolder.Callback {
 	static final int UPDATE_X_WHAT = 0;
 	static final int UPDATE_Y_WHAT = 1;
 
-
 	private static final int SIMULATE_REQUEST = 0;
-	
+
 	private AlertDialog mHelpDialog;
 	private AlertDialog mInfoDialog;
-	
+
 	private DesignView mDesignView;
 	private Menu mMenu;
 	private LinearLayout mMainLayout;
@@ -119,7 +118,7 @@ public class DesignActivity extends Activity implements SurfaceHolder.Callback {
 	}
 
 	public void save() {
-		mDesignView.save(mName);
+		mName = mDesignView.save(mName);
 	}
 
 	@Override
@@ -147,7 +146,7 @@ public class DesignActivity extends Activity implements SurfaceHolder.Callback {
 					.get("org.jtb.droidlife.seeder.position") : null;
 		}
 		if (mPosition != null) {
-			mName = SeederManager.getInstance(this).getSeeders().get(mPosition)
+			mName = SeederManager.getInstance(this).getSeeder(mPosition)
 					.getName();
 		} else {
 			mName = savedInstanceState != null ? (String) savedInstanceState
@@ -226,14 +225,13 @@ public class DesignActivity extends Activity implements SurfaceHolder.Callback {
 		Seeder seeder = null;
 
 		if (mPosition != null) {
-			seeder = SeederManager.getInstance(this).getSeeders()
-					.get(mPosition);
+			seeder = SeederManager.getInstance(this).getSeeder(mPosition);
 			mDesignView.seed(seeder);
 		} else {
 			mDesignView.seed(null);
 		}
 	}
-	
+
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
 		mDesignView.setSize(width, height);

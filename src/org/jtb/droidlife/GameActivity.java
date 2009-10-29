@@ -161,7 +161,8 @@ public class GameActivity extends Activity implements
 	}
 
 	public void save(String name) {
-		mGameView.save(name);
+		name = mGameView.save(name);
+		mPosition = SeederManager.getInstance(this).getPosition(name);
 	}
 
 	@Override
@@ -202,8 +203,7 @@ public class GameActivity extends Activity implements
 	}
 
 	private void seed() {
-		Seeder seeder = SeederManager.getInstance(this).getSeeders().get(
-				mPosition);
+		Seeder seeder = SeederManager.getInstance(this).getSeeder(mPosition);
 		mGameView.seed(seeder);
 	}
 

@@ -20,8 +20,7 @@ public abstract class SeederDialog extends AlertDialog {
 			mContext = context;
 			mActivityClass = activityClass;
 			
-			Seeder seeder = SeederManager.getInstance(mContext).getSeeders()
-					.get(mPosition);
+			Seeder seeder = SeederManager.getInstance(mContext).getSeeder(mPosition);
 
 			LayoutInflater inflater = (LayoutInflater) context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

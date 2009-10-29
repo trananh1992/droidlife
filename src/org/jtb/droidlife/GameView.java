@@ -164,7 +164,6 @@ class GameView extends SurfaceView implements Seedable {
 		if (mWorld == null) {
 			return;
 		}
-		draw();
 		mActivityHandler.sendMessage(mActivityHandler.obtainMessage(
 				GameActivity.UPDATE_STATUS_WHAT, isRunning()));
 		mActivityHandler.sendMessage(mActivityHandler.obtainMessage(
@@ -173,6 +172,7 @@ class GameView extends SurfaceView implements Seedable {
 				GameActivity.UPDATE_GEN_WHAT, mWorld.getGeneration()));
 		mActivityHandler.sendMessage(mActivityHandler.obtainMessage(
 				GameActivity.UPDATE_POP_WHAT, mWorld.getPopulation()));
+		draw();
 	}
 
 	public boolean isRunning() {
@@ -187,22 +187,29 @@ class GameView extends SurfaceView implements Seedable {
 		this.mSurfaceHolder = mSurfaceHolder;
 	}
 
-	public void save(String name) {
+	public String save(String name) {
 		SeedSource ss;
+
 		if (mSeeder == null) {
 			ss = new Life106SeedSource();
 		} else if (!mSeeder.getSeedSource().isWritable()) {
 			ss = new Life106SeedSource();
+
+			// we are duplicating a seed from a non-writable source,
+			// qualify the copy with a unique identifier so they
+			// can be distinguished
+			name = new SeedNameQualifier(name).toString();
 		} else {
 			ss = mSeeder.getSeedSource();
 		}
 
 		if (!ss.isWritable()) {
-			Log.e(getClass().getSimpleName(), "seed is not writable");
-			return;
+			throw new AssertionError("seed is not writable");
 		}
 
 		ss.writeSeed(name, mWorld);
 		SeederManager.getInstance(mContext).refresh();
+
+		return name;
 	}
 }

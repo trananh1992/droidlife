@@ -21,12 +21,12 @@ public class RandomSeederDialog extends SeederDialog {
 		}
 		
 		public void setViews() {
-			Seeder seeder = SeederManager.getInstance(mContext).getSeeders().get(mPosition);
+			Seeder seeder = SeederManager.getInstance(mContext).getSeeder(mPosition);
 			mLoadEdit.setText(Integer.toString(((RandomSeeder)seeder).getLoad()));
 		}
 		
 		public void setSeeder() {
-			Seeder seeder = SeederManager.getInstance(mContext).getSeeders().get(mPosition);
+			Seeder seeder = SeederManager.getInstance(mContext).getSeeder(mPosition);
 			((RandomSeeder)seeder).setLoad(Integer.parseInt(mLoadEdit.getText().toString()));
 		}
 	}

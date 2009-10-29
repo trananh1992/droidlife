@@ -211,7 +211,7 @@ class DesignView extends SurfaceView implements Seedable {
 		draw();
 	}
 
-	public void save(String name) {
+	public String save(String name) {
 		SeedSource ss;
 		
 		if (mSeeder == null) {
@@ -228,12 +228,13 @@ class DesignView extends SurfaceView implements Seedable {
 		}
 		
 		if (!ss.isWritable()) {
-			Log.e(getClass().getSimpleName(), "seed is not writable");
-			return;
+			throw new AssertionError("seed is not writable");
 		}
 
 		ss.writeSeed(name, mWorld);
 		SeederManager.getInstance(mContext).refresh();
+		
+		return name;
 	}
 	
 }
