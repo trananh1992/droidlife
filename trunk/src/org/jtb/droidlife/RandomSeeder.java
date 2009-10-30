@@ -2,7 +2,7 @@ package org.jtb.droidlife;
 
 import android.content.Context;
 
-public class RandomSeeder extends Seeder {
+public class RandomSeeder extends GeneratedSeeder {
 	private int load = 5;
 	
 	public int getLoad() {
@@ -14,14 +14,14 @@ public class RandomSeeder extends Seeder {
 	}
 
 	public RandomSeeder(SeedSource seedSource) {
-		super(seedSource, "Random");
+		super(seedSource, "Random (generated)");
 	}
 
 	public void seed(World world) {
 		for (int i = 1; i < world.cells.length-1; i++) {
 			for (int j = 1; j < world.cells[0].length-1; j++) {
 				if (RANDOM.nextInt(load) == 0) {
-					world.cells[i][j].spawn(RANDOM.nextInt(Cell.PHENOTYPES_SIZE));
+					world.cells[i][j].spawn();
 				}
 			}
 		}
@@ -31,5 +31,5 @@ public class RandomSeeder extends Seeder {
 	public SeederDialog.Builder getSeederDialogBuilder(Context context, int position, Class activityClass) {
 		RandomSeederDialog.Builder builder = new RandomSeederDialog.Builder(context, position, activityClass);
 		return builder;
-	}
+	}	
 }

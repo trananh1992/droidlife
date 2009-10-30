@@ -107,13 +107,8 @@ class DesignView extends SurfaceView implements Seedable {
 		if (mWorld.cells[mX][mY].isLiving()) {
 			mWorld.cells[mX][mY].die();
 		} else {
-			mWorld.cells[mX][mY].spawn(0);
+			mWorld.cells[mX][mY].spawn(Color.WHITE);
 		}
-		draw();
-	}
-
-	public void spawn() {
-		mWorld.cells[mX][mY].spawn(0);
 		draw();
 	}
 
