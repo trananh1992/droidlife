@@ -83,7 +83,7 @@ public class Life106Seeder extends FileSeeder {
 				continue;
 			}
 
-			world.cells[x][y].spawn(RANDOM.nextInt(Cell.PHENOTYPES_SIZE));
+			world.cells[x][y].spawn();
 		}
 	}
 }

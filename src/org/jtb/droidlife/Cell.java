@@ -7,11 +7,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 public class Cell {
-	static int PHENOTYPES_SIZE = 7;
-
 	private static Random RANDOM = new Random(System.currentTimeMillis());
 	private static Cell[] NEIGHBORS = new Cell[8];
-	private static int[] PHENOTYPES = new int[PHENOTYPES_SIZE];
+	private static float COLOR_FACTOR = 1.5f; 
 
 	private static Paint CIRCLE_PAINT;
 	private static Paint POINT_PAINT;
@@ -27,9 +25,9 @@ public class Cell {
 
 	private int age = -1;
 	private int x, y, size, cX, cY, radius;
-	private int phenotype = -1;
 	private int[] birthRule, survivalRule;
 	private World world;
+	private int color = Color.WHITE;
 	
 	public Cell(World world, int[] birthRule, int[] survivalRule, int x, int y,
 			int size) {
@@ -53,8 +51,8 @@ public class Cell {
 		this.y = c.y;
 		this.size = c.size;
 		this.age = c.age;
-		this.phenotype = c.phenotype;		
-
+		this.color = c.color;
+		
 		cX = x * size;
 		cY = y * size;
 		radius = size / 2;
@@ -68,42 +66,34 @@ public class Cell {
 		return age != -1;
 	}
 
-	public void spawn(int phenotype) {
-		this.phenotype = phenotype;
+	public void spawn() {
 		age = 0;
+		
+		int r = RANDOM.nextInt(0xFF);
+		int g = RANDOM.nextInt(0xFF);
+		int b = RANDOM.nextInt(0xFF);
+		
+		color = Color.rgb(r, g, b);
+	}
+
+	public void spawn(int color) {
+		age = 0;
+		this.color = color;
 	}
 
 	public void die() {
 		age = -1;
-		phenotype = -1;
 	}
 
 	private int getColor() {
-		switch (phenotype) {
-		case 0:
-			return Color.WHITE;
-		case 1:
-			return Color.GREEN;
-		case 2:
-			return Color.BLUE;
-		case 3:
-			return Color.RED;
-		case 4:
-			return Color.YELLOW;
-		case 5:
-			return Color.MAGENTA;
-		case 6:
-			return Color.CYAN;
-		default:
-			return Color.WHITE;
-		}
+		return color;
 	}
 
 	public void draw(Canvas canvas) {
 		if (!isLiving()) {
 			return;
 		}
-		CIRCLE_PAINT.setColor(getColor());
+		CIRCLE_PAINT.setColor(color);
 		canvas.drawCircle(cX, cY, radius, CIRCLE_PAINT);
 	}
 
@@ -129,8 +119,8 @@ public class Cell {
 		} else {
 			for (int k = 0; k < birthRule.length; k++) {
 				if (count == birthRule[k]) {
-					phenotype = dominantPhenotype();
-					spawn(phenotype);
+					int bc = birthColor(count);
+					spawn(bc);
 					break;
 				}
 			}
@@ -163,39 +153,56 @@ public class Cell {
 		return count;
 	}
 
-	private int dominantPhenotype() {
-		for (int i = 0; i < PHENOTYPES.length; i++) {
-			PHENOTYPES[i] = 0;
-		}
+	private int birthColor(int count) {
+		int rSum = 0, gSum = 0, bSum = 0;
 		
 		for (int i = 0; i < NEIGHBORS.length; i++) {
-			if (NEIGHBORS[i].isLiving()) {
-				PHENOTYPES[NEIGHBORS[i].phenotype]++;
+			if (!NEIGHBORS[i].isLiving()) {
+				continue;
 			}
+			int c = NEIGHBORS[i].getColor();
+			int r = Color.red(c);
+			int g = Color.green(c);
+			int b = Color.blue(c);
+
+			rSum += r / count;
+			gSum += g / count;
+			bSum += b / count;
 		}
-
-		int mIndex = 0, max = 0;
-
-		int start = RANDOM.nextInt(PHENOTYPES_SIZE);
-		int i = start;
-		boolean done = false;
 		
-		while (!done) {
-			if ((PHENOTYPES[i] > max)
-					|| (PHENOTYPES[i] == max && RANDOM.nextBoolean())) {
-				max = PHENOTYPES[i];
-				mIndex = i;
-			}			
-			
-			i++;
-			if (i == PHENOTYPES_SIZE) {
-				i = 0;
-			}
-			if (i == start) {
-				done = true;
-			}
+		int fr = rSum;
+		int fg = gSum;
+		int fb = bSum;
+		
+		if (rSum > gSum) {
+			fr *= COLOR_FACTOR;
+			fg /= COLOR_FACTOR;
 		}
-
-		return mIndex;
+		if (rSum > bSum) {
+			fr *= COLOR_FACTOR;
+			fb /= COLOR_FACTOR;
+		}
+		if (gSum > rSum) {
+			fg *= COLOR_FACTOR;
+			fr /= COLOR_FACTOR;
+		}
+		if (gSum > bSum) {
+			fg *= COLOR_FACTOR;
+			fb /= COLOR_FACTOR;
+		}
+		if (bSum > rSum) {
+			fb *= COLOR_FACTOR;
+			fr /= COLOR_FACTOR;
+		}
+		if (bSum > gSum) {
+			fb *= COLOR_FACTOR;
+			fg /= COLOR_FACTOR;
+		}
+		
+		fr = Math.min(0xff, fr);
+		fg = Math.min(0xff, fg);
+		fb = Math.min(0xff, fb);
+		
+		return Color.rgb(fr, fg, fb);
 	}
 }

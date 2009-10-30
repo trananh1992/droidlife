@@ -69,6 +69,12 @@ public abstract class Seeder implements Comparable<Seeder> {
 	}
 
 	public int compareTo(Seeder other) {
+		if (this instanceof GeneratedSeeder && !(other instanceof GeneratedSeeder)) {
+			return -1;
+		}
+		if (!(this instanceof GeneratedSeeder) && (other instanceof GeneratedSeeder)) {
+			return 1;
+		}
 		String n1 = name.toLowerCase();
 		String n2 = other.name.toLowerCase();
 
