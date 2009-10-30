@@ -5,12 +5,9 @@ import java.util.Random;
 import android.graphics.Canvas;
 
 public class World {
-	private static Random RANDOM = new Random(System.currentTimeMillis());
-
 	Cell[][] cells;
 	private Cell[] current;
 	private Cell[] previous;
-	private Cell[][] last;
 	private int[] birthNeighbors;
 	private int[] surviveNeighbors;
 	private int generation = 0;
@@ -52,7 +49,6 @@ public class World {
 		cells = new Cell[xMax + 2][yMax + 2];
 		current = new Cell[yMax + 2];
 		previous = new Cell[yMax + 2];
-		last = new Cell[xMax + 2][yMax + 2];
 		this.birthNeighbors = birthNeighbors;
 		this.surviveNeighbors = surviveNeighbors;
 
@@ -69,7 +65,6 @@ public class World {
 
 	public void generate() {
 		copy(cells[0], previous);
-		// copy(cells, last);
 
 		population = 0;
 		for (int i = 1; i < cells.length - 1; i++) {
@@ -93,12 +88,6 @@ public class World {
 		}
 	}
 
-	private void copy(Cell[][] src, Cell[][] dest) {
-		for (int i = 0; i < src.length; i++) {
-			copy(src[i], dest[i]);
-		}
-	}
-	
 	public String getType() {
 		StringBuilder sb = new StringBuilder();
 		sb.append('b');
