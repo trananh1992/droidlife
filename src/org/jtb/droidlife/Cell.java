@@ -7,9 +7,11 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 public class Cell {
-	private static Random RANDOM = new Random(System.currentTimeMillis());
-
 	static int PHENOTYPES_SIZE = 7;
+
+	private static Random RANDOM = new Random(System.currentTimeMillis());
+	private static Cell[] NEIGHBORS = new Cell[8];
+	private static int[] PHENOTYPES = new int[PHENOTYPES_SIZE];
 
 	private static Paint CIRCLE_PAINT;
 	private static Paint POINT_PAINT;
@@ -24,30 +26,38 @@ public class Cell {
 	}
 
 	private int age = -1;
-	private int x, y, size;
+	private int x, y, size, cX, cY, radius;
 	private int phenotype = -1;
-	private int[] birthNeighbors, surviveNeighbors;
+	private int[] birthRule, survivalRule;
 	private World world;
-
-	public Cell(World world, int[] birthNeighbors, int[] surviveNeighbors,
-			int x, int y, int size) {
+	
+	public Cell(World world, int[] birthRule, int[] survivalRule, int x, int y,
+			int size) {
 		this.world = world;
-		this.surviveNeighbors = surviveNeighbors;
-		this.birthNeighbors = birthNeighbors;
+		this.survivalRule = survivalRule;
+		this.birthRule = birthRule;
 		this.x = x;
 		this.y = y;
 		this.size = size;
+		
+		cX = x * size;
+		cY = y * size;
+		radius = size / 2;		
 	}
 
 	public Cell(Cell c) {
 		this.world = c.world;
-		this.surviveNeighbors = c.surviveNeighbors;
-		this.birthNeighbors = c.birthNeighbors;
+		this.survivalRule = c.survivalRule;
+		this.birthRule = c.birthRule;
 		this.x = c.x;
 		this.y = c.y;
 		this.size = c.size;
 		this.age = c.age;
-		this.phenotype = c.phenotype;
+		this.phenotype = c.phenotype;		
+
+		cX = x * size;
+		cY = y * size;
+		radius = size / 2;
 	}
 
 	public int getAge() {
@@ -93,14 +103,8 @@ public class Cell {
 		if (!isLiving()) {
 			return;
 		}
-		if (size > 2) {
-			CIRCLE_PAINT.setColor(getColor());
-			canvas.drawCircle(x * size, y * size, size / 2, CIRCLE_PAINT);
-		} else {
-			POINT_PAINT.setColor(getColor());
-			POINT_PAINT.setStrokeWidth(size);
-			canvas.drawPoint(x * size, y * size, POINT_PAINT);
-		}
+		CIRCLE_PAINT.setColor(getColor());
+		canvas.drawCircle(cX, cY, radius, CIRCLE_PAINT);
 	}
 
 	public void generate(World world, Cell[] current, Cell[] previous) {
@@ -108,13 +112,13 @@ public class Cell {
 			age++;
 		}
 
-		Cell[] neighbors = neighbors(world, current, previous);
-		int count = living(neighbors);
+		findNeighbors(world, current, previous);
+		int count = living();
 
 		if (isLiving()) {
 			boolean survive = false;
-			for (int k = 0; k < surviveNeighbors.length; k++) {
-				if (count == surviveNeighbors[k]) {
+			for (int k = 0; k < survivalRule.length; k++) {
+				if (count == survivalRule[k]) {
 					survive = true;
 					break;
 				}
@@ -123,9 +127,9 @@ public class Cell {
 				die();
 			}
 		} else {
-			for (int k = 0; k < birthNeighbors.length; k++) {
-				if (count == birthNeighbors[k]) {
-					phenotype = dominantPhenotype(neighbors);
+			for (int k = 0; k < birthRule.length; k++) {
+				if (count == birthRule[k]) {
+					phenotype = dominantPhenotype();
 					spawn(phenotype);
 					break;
 				}
@@ -134,28 +138,24 @@ public class Cell {
 
 	}
 
-	private Cell[] neighbors(World world, Cell[] current, Cell[] previous) {
-		Cell[] neighbors = new Cell[8];
+	private void findNeighbors(World world, Cell[] current, Cell[] previous) {
+		NEIGHBORS[0] = previous[y - 1];
+		NEIGHBORS[1] = previous[y];
+		NEIGHBORS[2] = previous[y + 1];
 
-		neighbors[0] = previous[y - 1];
-		neighbors[1] = previous[y];
-		neighbors[2] = previous[y + 1];
+		NEIGHBORS[3] = current[y - 1];
+		NEIGHBORS[4] = current[y + 1];
 
-		neighbors[3] = current[y - 1];
-		neighbors[4] = current[y + 1];
-
-		neighbors[5] = world.cells[x + 1][y - 1];
-		neighbors[6] = world.cells[x + 1][y];
-		neighbors[7] = world.cells[x + 1][y + 1];
-
-		return neighbors;
+		NEIGHBORS[5] = world.cells[x + 1][y - 1];
+		NEIGHBORS[6] = world.cells[x + 1][y];
+		NEIGHBORS[7] = world.cells[x + 1][y + 1];
 	}
 
-	private int living(Cell[] neighbors) {
+	private int living() {
 		int count = 0;
 
-		for (int i = 0; i < neighbors.length; i++) {
-			if (neighbors[i].isLiving()) {
+		for (int i = 0; i < NEIGHBORS.length; i++) {
+			if (NEIGHBORS[i].isLiving()) {
 				count++;
 			}
 		}
@@ -163,33 +163,36 @@ public class Cell {
 		return count;
 	}
 
-	private int dominantPhenotype(Cell[] neighbors) {
-		int[] phenotypes = new int[PHENOTYPES_SIZE];
-
-		for (int i = 0; i < neighbors.length; i++) {
-			if (neighbors[i].isLiving()) {
-				phenotypes[neighbors[i].phenotype]++;
+	private int dominantPhenotype() {
+		for (int i = 0; i < PHENOTYPES.length; i++) {
+			PHENOTYPES[i] = 0;
+		}
+		
+		for (int i = 0; i < NEIGHBORS.length; i++) {
+			if (NEIGHBORS[i].isLiving()) {
+				PHENOTYPES[NEIGHBORS[i].phenotype]++;
 			}
 		}
 
 		int mIndex = 0, max = 0;
 
-		if (RANDOM.nextBoolean()) {
-			for (int i = 0; i < phenotypes.length; i++) {
-				if ((phenotypes[i] > max)
-						|| (phenotypes[i] == max && RANDOM.nextBoolean())) {
-					max = phenotypes[i];
-					mIndex = i;
-				}
+		int start = RANDOM.nextInt(PHENOTYPES_SIZE);
+		int i = start;
+		boolean done = false;
+		
+		while (!done) {
+			if ((PHENOTYPES[i] > max)
+					|| (PHENOTYPES[i] == max && RANDOM.nextBoolean())) {
+				max = PHENOTYPES[i];
+				mIndex = i;
+			}			
+			
+			i++;
+			if (i == PHENOTYPES_SIZE) {
+				i = 0;
 			}
-		} else {
-			for (int i = phenotypes.length - 1; i >= 0; i--) {
-				if ((phenotypes[i] > max)
-						|| (phenotypes[i] == max && RANDOM.nextBoolean())) {
-					max = phenotypes[i];
-					mIndex = i;
-				}
-
+			if (i == start) {
+				done = true;
 			}
 		}
 
