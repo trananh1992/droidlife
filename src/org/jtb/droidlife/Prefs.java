@@ -117,4 +117,8 @@ public class Prefs {
 	public void setUpgradedTo(int version) {
 		setInt("upgradedTo", version);
 	}
+	
+	public boolean isColored() {
+		return getBoolean("colored", true);
+	}
 }

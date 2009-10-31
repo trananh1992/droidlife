@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class GameEditDialog extends AlertDialog {
 
@@ -29,14 +30,26 @@ public class GameEditDialog extends AlertDialog {
 			setPositiveButton(R.string.ok,
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {
-							String name = mNameEdit.getText().toString() + ".lif";
+							String name = mNameEdit.getText().toString()
+									+ ".lif";
+							int i = SeederManager.getInstance(mActivity)
+									.getPosition(name);
+							if (i != -1) {
+								Toast.makeText(mActivity,
+										"That name is already in use.",
+										Toast.LENGTH_LONG).show();
+								return;
+
+							}
 							mActivity.save(name);
-							
-							Intent i = new Intent(mActivity,
+
+							Intent intent = new Intent(mActivity,
 									DesignActivity.class);
-							i.putExtra("org.jtb.droidlife.seeder.position",
-									SeederManager.getInstance(mActivity).getPosition(name));
-							mActivity.startActivity(i);
+							intent.putExtra(
+									"org.jtb.droidlife.seeder.position",
+									SeederManager.getInstance(mActivity)
+											.getPosition(name));
+							mActivity.startActivity(intent);
 						}
 					});
 			setNegativeButton(R.string.cancel,

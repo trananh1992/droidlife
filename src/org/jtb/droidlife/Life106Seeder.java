@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 
+import android.graphics.Color;
 import android.util.Log;
 
 public class Life106Seeder extends FileSeeder {
@@ -23,9 +24,9 @@ public class Life106Seeder extends FileSeeder {
 	}
 
 	@Override
-	public void seed(World world) {
+	public void seed(World world, boolean colored) {
 		read();
-		populate(world);
+		populate(world, colored);
 	}
 
 	private void read() {
@@ -69,9 +70,9 @@ public class Life106Seeder extends FileSeeder {
 		}
 	}
 
-	private void populate(World world) {
-		int xmax = world.cells.length-2;
-		int ymax = world.cells[0].length-2;
+	private void populate(World world, boolean colored) {
+		int xmax = world.cells.length - 2;
+		int ymax = world.cells[0].length - 2;
 		int xmid = xmax / 2;
 		int ymid = ymax / 2;
 
@@ -83,7 +84,11 @@ public class Life106Seeder extends FileSeeder {
 				continue;
 			}
 
-			world.cells[x][y].spawn();
+			if (colored) {
+				world.cells[x][y].spawn();
+			} else {
+				world.cells[x][y].spawn(Color.WHITE);
+			}
 		}
 	}
 }
