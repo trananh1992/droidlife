@@ -76,7 +76,9 @@ public class World {
 					population++;
 				}
 			}
-			copy(current, previous);
+			Cell[] tmp = previous;
+			previous = current;
+			current = tmp;
 		}
 		
 		generation++;

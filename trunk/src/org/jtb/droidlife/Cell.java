@@ -9,18 +9,13 @@ import android.graphics.Paint;
 public class Cell {
 	private static Random RANDOM = new Random(System.currentTimeMillis());
 	private static Cell[] NEIGHBORS = new Cell[8];
-	private static float COLOR_FACTOR = 1.5f; 
+	private static float COLOR_FACTOR = 1.5f;
 
 	private static Paint CIRCLE_PAINT;
-	private static Paint POINT_PAINT;
 
 	static {
 		CIRCLE_PAINT = new Paint();
 		CIRCLE_PAINT.setAntiAlias(true);
-
-		POINT_PAINT = new Paint();
-		POINT_PAINT.setAntiAlias(true);
-		POINT_PAINT.setStyle(Paint.Style.STROKE);
 	}
 
 	private int age = -1;
@@ -28,7 +23,7 @@ public class Cell {
 	private int[] birthRule, survivalRule;
 	private World world;
 	private int color = Color.WHITE;
-	
+
 	public Cell(World world, int[] birthRule, int[] survivalRule, int x, int y,
 			int size) {
 		this.world = world;
@@ -37,10 +32,10 @@ public class Cell {
 		this.x = x;
 		this.y = y;
 		this.size = size;
-		
+
 		cX = x * size;
 		cY = y * size;
-		radius = size / 2;		
+		radius = size / 2;
 	}
 
 	public Cell(Cell c) {
@@ -52,7 +47,7 @@ public class Cell {
 		this.size = c.size;
 		this.age = c.age;
 		this.color = c.color;
-		
+
 		cX = x * size;
 		cY = y * size;
 		radius = size / 2;
@@ -68,11 +63,11 @@ public class Cell {
 
 	public void spawn() {
 		age = 0;
-		
+
 		int r = RANDOM.nextInt(0xFF);
 		int g = RANDOM.nextInt(0xFF);
 		int b = RANDOM.nextInt(0xFF);
-		
+
 		color = Color.rgb(r, g, b);
 	}
 
@@ -155,7 +150,7 @@ public class Cell {
 
 	private int birthColor(int count) {
 		int rSum = 0, gSum = 0, bSum = 0;
-		
+
 		for (int i = 0; i < NEIGHBORS.length; i++) {
 			if (!NEIGHBORS[i].isLiving()) {
 				continue;
@@ -169,11 +164,11 @@ public class Cell {
 			gSum += g / count;
 			bSum += b / count;
 		}
-		
+
 		int fr = rSum;
 		int fg = gSum;
 		int fb = bSum;
-		
+
 		if (rSum > gSum) {
 			fr *= COLOR_FACTOR;
 			fg /= COLOR_FACTOR;
@@ -198,11 +193,11 @@ public class Cell {
 			fb *= COLOR_FACTOR;
 			fg /= COLOR_FACTOR;
 		}
-		
+
 		fr = Math.min(0xff, fr);
 		fg = Math.min(0xff, fg);
 		fb = Math.min(0xff, fb);
-		
+
 		return Color.rgb(fr, fg, fb);
 	}
 }

@@ -32,7 +32,7 @@ class DesignView extends SurfaceView implements Seedable {
 		POINT_PAINT.setStyle(Paint.Style.STROKE);
 		POINT_PAINT.setStrokeWidth(2);
 
-		XY_PAINT.setColor(Color.GRAY);
+		XY_PAINT.setColor(Color.DKGRAY);
 		XY_PAINT.setStyle(Paint.Style.STROKE);
 		XY_PAINT.setStrokeWidth(0);
 	}
@@ -93,7 +93,7 @@ class DesignView extends SurfaceView implements Seedable {
 		mY = mYMid;
 
 		if (mSeeder != null) {
-			mSeeder.seed(mWorld);
+			mSeeder.seed(mWorld, false);
 		}
 		
 		draw();

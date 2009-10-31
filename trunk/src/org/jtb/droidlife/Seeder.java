@@ -1,6 +1,5 @@
 package org.jtb.droidlife;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import android.content.Context;
@@ -20,11 +19,12 @@ public abstract class Seeder implements Comparable<Seeder> {
 		return seedSource;
 	}
 	
-	public abstract void seed(World world);
+	public abstract void seed(World world, boolean colored);
 	
 	public SeederDialog.Builder getSeederDialogBuilder(Context context, int position, Class activityClass) {
 		return null;
 	}
+	
 	public void setName(String name) {
 		this.name = name;
 	}

@@ -130,7 +130,7 @@ class GameView extends SurfaceView implements Seedable {
 				cellSize, birthNeighbors, surviveNeighbors);
 		mActivityHandler.sendMessage(mActivityHandler.obtainMessage(
 				GameActivity.UPDATE_NAME_WHAT, seeder.getName()));
-		seeder.seed(mWorld);
+		seeder.seed(mWorld, prefs.isColored());
 		refresh();
 	}
 

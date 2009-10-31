@@ -7,13 +7,14 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class NewDialog extends AlertDialog {
 
 	public static class Builder extends AlertDialog.Builder {
 		private SeedersActivity mActivity;
 		private EditText mNameEdit;
-		
+
 		public Builder(SeedersActivity activity) {
 			super(activity);
 
@@ -25,14 +26,27 @@ public class NewDialog extends AlertDialog {
 			setView(layout);
 			setTitle("Name");
 			setIcon(android.R.drawable.ic_dialog_info);
-			
-			mNameEdit = (EditText)layout.findViewById(R.id.name_edit);
+
+			mNameEdit = (EditText) layout.findViewById(R.id.name_edit);
 			setPositiveButton(R.string.ok,
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {
-							Intent i = new Intent(mActivity, DesignActivity.class);
-							i.putExtra("org.jtb.droidlife.seeder.name", mNameEdit.getText().toString() + ".lif");
-							mActivity.startActivity(i);
+							String name = mNameEdit.getText().toString()
+									+ ".lif";
+							int i = SeederManager.getInstance(mActivity)
+									.getPosition(name);
+							if (i != -1) {
+								Toast.makeText(mActivity,
+										"That name is already in use.",
+										Toast.LENGTH_LONG).show();
+								return;
+
+							}
+							Intent intent = new Intent(mActivity,
+									DesignActivity.class);
+							intent.putExtra("org.jtb.droidlife.seeder.name",
+									name);
+							mActivity.startActivity(intent);
 						}
 					});
 			setNegativeButton(R.string.cancel,
