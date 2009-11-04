@@ -10,7 +10,7 @@ public class SeedNameQualifier {
 	private String qName;
 	
 	public SeedNameQualifier(String name) {
-		qName = name + " " + DATE_FORMAT.format(new Date(System.currentTimeMillis())) + ".lif";
+		qName = name + " " + DATE_FORMAT.format(new Date(System.currentTimeMillis()));
 	}
 	
 	@Override

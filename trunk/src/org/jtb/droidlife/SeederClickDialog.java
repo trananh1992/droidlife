@@ -23,14 +23,14 @@ public class SeederClickDialog extends AlertDialog {
 			String[] items;
 
 			if (seeder.getSeedSource().isWritable()) {
-				items = new String[3];
-				items[0] = "Play";
+				items = new String[4];
+				items[0] = "Simulate";
 				items[1] = "Edit";
 				items[2] = "Remove";
+				items[3] = "Send";
 			} else {
-				items = new String[2];
-				items[0] = "Play";
-				items[1] = "Edit";
+				items = new String[1];
+				items[0] = "Simulate";
 			}
 
 			setItems(items, new DialogInterface.OnClickListener() {
@@ -71,6 +71,10 @@ public class SeederClickDialog extends AlertDialog {
 					case 2:
 						seeder.remove();
 						mActivity.update();
+						break;
+					case 3:
+						SeedSender ss = new SeedSender(mActivity);
+						ss.send(seeder.getName(), (FileSeedSource)seeder.getSeedSource());
 						break;
 					}
 				}

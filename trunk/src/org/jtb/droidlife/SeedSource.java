@@ -13,6 +13,8 @@ import android.content.res.AssetManager;
 import android.util.Log;
 
 public abstract class SeedSource {
+	public static final SeedSource DEFAULT_WRITABLE = new RLESeedSource();
+	
 	public abstract ArrayList<Seeder> getSeeders();
 	
 	public boolean isWritable() {

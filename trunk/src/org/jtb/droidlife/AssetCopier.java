@@ -20,8 +20,8 @@ public class AssetCopier {
 	}
 
 	public void copy() {
-		String[] assetDirs = new String[] { "life106" };
-		String[] sdCardDirs = new String[] { "/sdcard/droidlife/life106" };
+		String[] assetDirs = new String[] { "life106", "rle" };
+		String[] sdCardDirs = new String[] { "/sdcard/droidlife/life106", "/sdcard/droidlife/rle" };
 
 		for (int i = 0; i < assetDirs.length; i++) {
 			String[] fileNames;

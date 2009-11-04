@@ -20,15 +20,12 @@ public class Cell {
 
 	private int age = -1;
 	private int x, y, size, cX, cY, radius;
-	private int[] birthRule, survivalRule;
 	private World world;
 	private int color = Color.WHITE;
 
-	public Cell(World world, int[] birthRule, int[] survivalRule, int x, int y,
+	public Cell(World world, int x, int y,
 			int size) {
 		this.world = world;
-		this.survivalRule = survivalRule;
-		this.birthRule = birthRule;
 		this.x = x;
 		this.y = y;
 		this.size = size;
@@ -40,8 +37,6 @@ public class Cell {
 
 	public Cell(Cell c) {
 		this.world = c.world;
-		this.survivalRule = c.survivalRule;
-		this.birthRule = c.birthRule;
 		this.x = c.x;
 		this.y = c.y;
 		this.size = c.size;
@@ -92,7 +87,8 @@ public class Cell {
 		canvas.drawCircle(cX, cY, radius, CIRCLE_PAINT);
 	}
 
-	public void generate(World world, Cell[] current, Cell[] previous) {
+	public void generate(World world, Cell[] current, Cell[] previous,
+			int[] birthRule, int[] survivalRule) {
 		if (isLiving()) {
 			age++;
 		}
