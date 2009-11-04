@@ -31,8 +31,7 @@ public class NewDialog extends AlertDialog {
 			setPositiveButton(R.string.ok,
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {
-							String name = mNameEdit.getText().toString()
-									+ ".lif";
+							String name = mNameEdit.getText().toString();
 							int i = SeederManager.getInstance(mActivity)
 									.getPosition(name);
 							if (i != -1) {

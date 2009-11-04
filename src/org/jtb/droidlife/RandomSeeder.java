@@ -15,7 +15,7 @@ public class RandomSeeder extends GeneratedSeeder {
 	}
 
 	public RandomSeeder(SeedSource seedSource) {
-		super(seedSource, "Random (generated)");
+		super(seedSource, "Random");
 	}
 
 	public void seed(World world, boolean colored) {

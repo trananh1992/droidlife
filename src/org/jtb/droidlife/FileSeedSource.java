@@ -23,10 +23,6 @@ public abstract class FileSeedSource extends SeedSource {
 
 	protected abstract Seeder newSeeder(String name);
 
-	public boolean isWritable() {
-		return true;
-	}
-
 	public ArrayList<Seeder> getSeeders() {
 		String[] names = getNames();
 		ArrayList<Seeder> seeders = new ArrayList<Seeder>();
@@ -41,4 +37,8 @@ public abstract class FileSeedSource extends SeedSource {
 	}
 
 	public abstract Reader getReader(String name);
+	protected abstract String getFileExtension();	
+	public abstract String getFileName(String name);
+	public abstract String getFilePath(String name);
+	public abstract String getFileContent(String name);
 }

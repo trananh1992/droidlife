@@ -17,7 +17,7 @@
 			android:gravity="center_horizontal" android:textSize="12px"
 			android:autoLink="web" />
 		<TextView android:paddingTop="10px"
-			android:text="To add seeds, place them into '/sdcard/droidlife/life106' (on your SD card).  Life 1.06 format only. Additional seeds can be downloaded from http://www.conwaylife.com/wiki"
+			android:text="To add seeds, place either RLE or Life 1.06 format files into '/sdcard/droidlife/rle' or '/sdcard/droidlife/life106' respectively.  Additional seeds can be downloaded from http://www.conwaylife.com/wiki"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:gravity="center_horizontal" android:textSize="12px"
 			android:autoLink="web" />

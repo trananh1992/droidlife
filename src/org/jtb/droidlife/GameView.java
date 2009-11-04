@@ -167,7 +167,7 @@ class GameView extends SurfaceView implements Seedable {
 		mActivityHandler.sendMessage(mActivityHandler.obtainMessage(
 				GameActivity.UPDATE_STATUS_WHAT, isRunning()));
 		mActivityHandler.sendMessage(mActivityHandler.obtainMessage(
-				GameActivity.UPDATE_TYPE_WHAT, mWorld.getType()));
+				GameActivity.UPDATE_TYPE_WHAT, mWorld.getRule()));
 		mActivityHandler.sendMessage(mActivityHandler.obtainMessage(
 				GameActivity.UPDATE_GEN_WHAT, mWorld.getGeneration()));
 		mActivityHandler.sendMessage(mActivityHandler.obtainMessage(
@@ -191,14 +191,9 @@ class GameView extends SurfaceView implements Seedable {
 		SeedSource ss;
 
 		if (mSeeder == null) {
-			ss = new Life106SeedSource();
+			ss = SeedSource.DEFAULT_WRITABLE;
 		} else if (!mSeeder.getSeedSource().isWritable()) {
-			ss = new Life106SeedSource();
-
-			// we are duplicating a seed from a non-writable source,
-			// qualify the copy with a unique identifier so they
-			// can be distinguished
-			name = new SeedNameQualifier(name).toString();
+			ss = SeedSource.DEFAULT_WRITABLE;
 		} else {
 			ss = mSeeder.getSeedSource();
 		}

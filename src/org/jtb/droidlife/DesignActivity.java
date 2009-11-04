@@ -117,8 +117,9 @@ public class DesignActivity extends Activity implements SurfaceHolder.Callback {
 		return false;
 	}
 
-	public void save() {
+	public String save() {
 		mName = mDesignView.save(mName);
+		return mName;
 	}
 
 	@Override

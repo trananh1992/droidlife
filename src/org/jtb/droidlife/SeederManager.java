@@ -17,7 +17,8 @@ public class SeederManager {
 		this.context = context;
 
 		seedSources = new SeedSource[] { new GeneratedSeedSource(),
-				new Life106SeedSource() };
+				new Life106SeedSource(),
+				new RLESeedSource() };
 
 		refresh();
 	}

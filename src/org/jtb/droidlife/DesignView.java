@@ -30,7 +30,7 @@ class DesignView extends SurfaceView implements Seedable {
 	static {
 		POINT_PAINT.setColor(Color.BLUE);
 		POINT_PAINT.setStyle(Paint.Style.STROKE);
-		POINT_PAINT.setStrokeWidth(2);
+		POINT_PAINT.setStrokeWidth(0);
 
 		XY_PAINT.setColor(Color.DKGRAY);
 		XY_PAINT.setStyle(Paint.Style.STROKE);
@@ -210,14 +210,9 @@ class DesignView extends SurfaceView implements Seedable {
 		SeedSource ss;
 		
 		if (mSeeder == null) {
-			ss = new Life106SeedSource();
+			ss = SeedSource.DEFAULT_WRITABLE;
 		} else if (!mSeeder.getSeedSource().isWritable()) {
-			ss = new Life106SeedSource();
-
-			// we are duplicating a seed from a non-writable source,
-			// qualify the copy with a unique identifier so they
-			// can be distinguished
-			name = new SeedNameQualifier(name).toString();			
+			ss = SeedSource.DEFAULT_WRITABLE;
 		} else {
 			ss = mSeeder.getSeedSource();
 		}
