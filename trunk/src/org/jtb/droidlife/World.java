@@ -75,16 +75,19 @@ public class World {
 		copy(cells[0], previous);
 
 		population = 0;
+		Cell[] tmp;
+		
 		for (int i = 1; i < cells.length - 1; i++) {
 			copy(cells[i], current);
+			Cell cell;
 			for (int j = 1; j < cells[i].length - 1; j++) {
-				Cell cell = cells[i][j];
+				cell = cells[i][j];
 				cell.generate(this, current, previous, birthNeighbors, surviveNeighbors);
 				if (cell.isLiving()) {
 					population++;
 				}
 			}
-			Cell[] tmp = previous;
+			tmp = previous;
 			previous = current;
 			current = tmp;
 		}

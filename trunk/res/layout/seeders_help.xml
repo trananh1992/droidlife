@@ -3,13 +3,13 @@
 	android:layout_width="fill_parent" android:layout_height="fill_parent">
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		android:orientation="vertical" android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:paddingLeft="10px"
-		android:paddingRight="10px">
+		android:layout_height="fill_parent" android:paddingLeft="10dp"
+		android:paddingRight="10dp">
 		<include layout="@layout/help_header" />
 		<TextView
 			android:text="Click a seed in the list to start a simulation. Long-press a seed to edit a seed. Use Menu>New to design a new, custom seed."
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:gravity="center_horizontal" android:textSize="12px"
-			android:paddingTop="10px" />
+			android:gravity="center_horizontal" android:textSize="12dp"
+			android:paddingTop="10dp" />
 	</LinearLayout>
 </ScrollView>

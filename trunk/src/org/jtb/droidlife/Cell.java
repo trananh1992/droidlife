@@ -108,9 +108,10 @@ public class Cell {
 				die();
 			}
 		} else {
+			int bc;
 			for (int k = 0; k < birthRule.length; k++) {
 				if (count == birthRule[k]) {
-					int bc = birthColor(count);
+					bc = birthColor(count);
 					spawn(bc);
 					break;
 				}
@@ -147,14 +148,16 @@ public class Cell {
 	private int birthColor(int count) {
 		int rSum = 0, gSum = 0, bSum = 0;
 
+		int c, r, g, b;
+		
 		for (int i = 0; i < NEIGHBORS.length; i++) {
 			if (!NEIGHBORS[i].isLiving()) {
 				continue;
 			}
-			int c = NEIGHBORS[i].getColor();
-			int r = Color.red(c);
-			int g = Color.green(c);
-			int b = Color.blue(c);
+			c = NEIGHBORS[i].getColor();
+			r = Color.red(c);
+			g = Color.green(c);
+			b = Color.blue(c);
 
 			rSum += r / count;
 			gSum += g / count;

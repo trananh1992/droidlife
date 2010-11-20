@@ -13,14 +13,15 @@ public abstract class SeederDialog extends AlertDialog {
 		protected Context mContext;
 		protected int mPosition;
 		protected Class mActivityClass;
-		
+
 		public Builder(Context context, int position, Class activityClass) {
 			super(context);
 			mPosition = position;
 			mContext = context;
 			mActivityClass = activityClass;
-			
-			Seeder seeder = SeederManager.getInstance(mContext).getSeeder(mPosition);
+
+			Seeder seeder = SeederManager.getInstance(mContext).getSeeder(
+					mPosition);
 
 			LayoutInflater inflater = (LayoutInflater) context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -36,12 +37,12 @@ public abstract class SeederDialog extends AlertDialog {
 			setPositiveButton(R.string.ok,
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {
-							setSeeder();
-							Intent i = new Intent(mContext,
-									mActivityClass);
-							i.putExtra("org.jtb.droidlife.seeder.position",
-									mPosition);
-							mContext.startActivity(i);
+							if (setSeeder()) {
+								Intent i = new Intent(mContext, mActivityClass);
+								i.putExtra("org.jtb.droidlife.seeder.position",
+										mPosition);
+								mContext.startActivity(i);
+							}
 						}
 					});
 			setNegativeButton(R.string.cancel,
@@ -58,7 +59,7 @@ public abstract class SeederDialog extends AlertDialog {
 
 		public abstract void setViews();
 
-		public abstract void setSeeder();
+		public abstract boolean setSeeder();
 	}
 
 	public SeederDialog(Context context) {

@@ -9,10 +9,12 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 
+import android.os.Environment;
 import android.util.Log;
 
 public abstract class SDCardSeedSource extends FileSeedSource {
-	protected static final String SDCARD_PREFIX = "/sdcard/droidlife/";
+	protected static final String SDCARD_PREFIX = Environment
+			.getExternalStorageDirectory() + "/droidlife/";
 
 	public SDCardSeedSource(String path) {
 		super(SDCARD_PREFIX + "/" + path);
@@ -20,6 +22,9 @@ public abstract class SDCardSeedSource extends FileSeedSource {
 
 	public String[] getNames() {
 		String[] fileNames = new File(path).list();
+		if (fileNames == null) {
+			return new String[0];
+		}
 		String[] names = new String[fileNames.length];
 		for (int i = 0; i < fileNames.length; i++) {
 			int dotIndex = fileNames[i].lastIndexOf('.');
@@ -75,22 +80,22 @@ public abstract class SDCardSeedSource extends FileSeedSource {
 		f.delete();
 	}
 
-	public String getFileName(String name) { 
+	public String getFileName(String name) {
 		return name + "." + getFileExtension();
 	}
 
-	public String getFilePath(String name) { 
+	public String getFilePath(String name) {
 		return path + "/" + getFileName(name);
 	}
-	
+
 	protected abstract SeedWriter getSeedWriter();
-	
+
 	public String getFileContent(String name) {
 		Reader reader = getReader(name);
 		BufferedReader br = new BufferedReader(reader);
 		String line;
 		StringBuilder sb = new StringBuilder();
-		
+
 		try {
 			while ((line = br.readLine()) != null) {
 				sb.append(line);
@@ -108,6 +113,6 @@ public abstract class SDCardSeedSource extends FileSeedSource {
 				}
 			}
 		}
-		
+
 	}
 }
