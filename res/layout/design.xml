@@ -6,7 +6,7 @@
 
 	<LinearLayout android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:layout_weight="1"
-		android:orientation="horizontal" android:minHeight="36px">
+		android:orientation="horizontal" android:minHeight="36dp">
 		<TextView android:id="@+id/name_text" android:text="Designing:"
 			android:gravity="left" android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:layout_weight="1"
@@ -20,13 +20,13 @@
 	</FrameLayout>
 	<LinearLayout android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:layout_weight="1"
-		android:orientation="horizontal" android:minHeight="36px">
+		android:orientation="horizontal" android:minHeight="36dp">
 		<TextView android:id="@+id/x_text" android:gravity="left"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
 			android:text="X:" android:layout_gravity="left|center_vertical"
 			android:layout_weight="1" />
 		<TextView android:id="@+id/y_text" android:text="Y:"
-			android:paddingLeft="5px" android:gravity="right"
+			android:paddingLeft="5dp" android:gravity="right"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
 			android:layout_gravity="left|center_horizontal"
 			android:layout_weight="1" />

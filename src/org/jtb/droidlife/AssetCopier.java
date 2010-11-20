@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Environment;
 import android.util.Log;
 
 public class AssetCopier {
@@ -21,7 +22,10 @@ public class AssetCopier {
 
 	public void copy() {
 		String[] assetDirs = new String[] { "life106", "rle" };
-		String[] sdCardDirs = new String[] { "/sdcard/droidlife/life106", "/sdcard/droidlife/rle" };
+		String[] sdCardDirs = new String[] {
+				Environment.getExternalStorageDirectory()
+						+ "/droidlife/life106",
+				Environment.getExternalStorageDirectory() + "/droidlife/rle" };
 
 		for (int i = 0; i < assetDirs.length; i++) {
 			String[] fileNames;
@@ -41,7 +45,7 @@ public class AssetCopier {
 
 	private void copy(String assetDir, String sdCardDir, String fileName) {
 		File destFile = new File(sdCardDir + File.separator + fileName);
-		
+
 		if (destFile.exists()) {
 			return;
 		}

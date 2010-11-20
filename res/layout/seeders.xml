@@ -3,10 +3,10 @@
 	android:orientation="vertical" android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
 	<TextView android:id="@+id/empty_list_text"
-		android:text="No seeds found."
-		android:textSize="16px" android:layout_width="fill_parent"
+		android:text="No seeds found. Did you delete /sdcard/droidlife?"
+		android:textSize="16dp" android:layout_width="fill_parent"
 		android:gravity="center" android:layout_height="fill_parent"
-		android:layout_margin="20px" />
+		android:layout_margin="20dp" />
 	<ListView android:id="@+id/seeder_list" android:layout_width="fill_parent"
 		android:layout_height="fill_parent" />
 </LinearLayout>
