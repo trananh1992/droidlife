@@ -19,13 +19,13 @@ public class RandomSeeder extends GeneratedSeeder {
 	}
 
 	public void seed(World world, boolean colored) {
-		for (int i = 1; i < world.cells.length - 1; i++) {
-			for (int j = 1; j < world.cells[0].length - 1; j++) {
+		for (int i = 1; i < world.current.length - 1; i++) {
+			for (int j = 1; j < world.current[0].length - 1; j++) {
 				if (RANDOM.nextInt(load) == 0) {
 					if (colored) {
-						world.cells[i][j].spawn();
+						world.current[i][j].spawn();
 					} else {
-						world.cells[i][j].spawn(Color.WHITE);
+						world.current[i][j].spawn(Color.WHITE);
 					}
 				}
 			}

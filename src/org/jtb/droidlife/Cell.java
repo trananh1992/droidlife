@@ -8,9 +8,7 @@ import android.graphics.Paint;
 
 public class Cell {
 	private static Random RANDOM = new Random(System.currentTimeMillis());
-	private static Cell[] NEIGHBORS = new Cell[8];
 	private static float COLOR_FACTOR = 1.5f;
-
 	private static Paint CIRCLE_PAINT;
 
 	static {
@@ -18,34 +16,43 @@ public class Cell {
 		CIRCLE_PAINT.setAntiAlias(true);
 	}
 
+	private Cell[] neighbors = new Cell[8];
 	private int age = -1;
 	private int x, y, size, cX, cY, radius;
 	private World world;
 	private int color = Color.WHITE;
+	private boolean wrap;
+	private Cell nullCell;
 
-	public Cell(World world, int x, int y,
-			int size) {
+	private Cell() {
+	}
+	
+	public Cell(World world, int x, int y, int size, boolean wrap) {
 		this.world = world;
 		this.x = x;
 		this.y = y;
 		this.size = size;
-
-		cX = x * size;
-		cY = y * size;
-		radius = size / 2;
+		this.wrap = wrap;
+		this.cX = x * size;
+		this.cY = y * size;
+		this.radius = size / 2;
+		this.neighbors = new Cell[8];
+		this.nullCell = new Cell();
 	}
 
-	public Cell(Cell c) {
+	public void init(Cell c) {
 		this.world = c.world;
 		this.x = c.x;
 		this.y = c.y;
 		this.size = c.size;
 		this.age = c.age;
 		this.color = c.color;
-
-		cX = x * size;
-		cY = y * size;
-		radius = size / 2;
+		this.neighbors = c.neighbors;
+		this.wrap = c.wrap;
+		this.cX = c.cX;
+		this.cY = c.cY;
+		this.radius = c.radius;
+		this.nullCell = c.nullCell;
 	}
 
 	public int getAge() {
@@ -87,19 +94,17 @@ public class Cell {
 		canvas.drawCircle(cX, cY, radius, CIRCLE_PAINT);
 	}
 
-	public void generate(World world, Cell[] current, Cell[] previous,
-			int[] birthRule, int[] survivalRule) {
+	public void generate() {
 		if (isLiving()) {
 			age++;
 		}
 
-		findNeighbors(world, current, previous);
 		int count = living();
 
 		if (isLiving()) {
 			boolean survive = false;
-			for (int k = 0; k < survivalRule.length; k++) {
-				if (count == survivalRule[k]) {
+			for (int k = 0; k < world.surviveNeighbors.length; k++) {
+				if (count == world.surviveNeighbors[k]) {
 					survive = true;
 					break;
 				}
@@ -109,8 +114,8 @@ public class Cell {
 			}
 		} else {
 			int bc;
-			for (int k = 0; k < birthRule.length; k++) {
-				if (count == birthRule[k]) {
+			for (int k = 0; k < world.birthNeighbors.length; k++) {
+				if (count == world.birthNeighbors[k]) {
 					bc = birthColor(count);
 					spawn(bc);
 					break;
@@ -120,24 +125,51 @@ public class Cell {
 
 	}
 
-	private void findNeighbors(World world, Cell[] current, Cell[] previous) {
-		NEIGHBORS[0] = previous[y - 1];
-		NEIGHBORS[1] = previous[y];
-		NEIGHBORS[2] = previous[y + 1];
+	public void getNeighbors() {
+		int xm1 = (x == 0) ? world.previous.length - 1 : x - 1;
+		int xp1 = (x == world.previous.length - 1) ? 0 : x + 1;
+		int ym1 = (y == 0) ? world.previous[0].length - 1 : y - 1;
+		int yp1 = (y == world.previous[0].length - 1) ? 0 : y + 1;
 
-		NEIGHBORS[3] = current[y - 1];
-		NEIGHBORS[4] = current[y + 1];
+		neighbors[0] = world.previous[xm1][ym1];
+		neighbors[1] = world.previous[xm1][y];
+		neighbors[2] = world.previous[xm1][yp1];
 
-		NEIGHBORS[5] = world.cells[x + 1][y - 1];
-		NEIGHBORS[6] = world.cells[x + 1][y];
-		NEIGHBORS[7] = world.cells[x + 1][y + 1];
+		neighbors[3] = world.previous[x][ym1];
+		neighbors[4] = world.previous[x][yp1];
+
+		neighbors[5] = world.previous[xp1][ym1];
+		neighbors[6] = world.previous[xp1][y];
+		neighbors[7] = world.previous[xp1][yp1];
+
+		if (!wrap) {
+			if (x == 0) {
+				neighbors[0] = nullCell;
+				neighbors[1] = nullCell;
+				neighbors[2] = nullCell;
+			} else if (x == world.previous.length - 1) {
+				neighbors[5] = nullCell;
+				neighbors[6] = nullCell;
+				neighbors[7] = nullCell;				
+			}
+			
+			if (y == 0) {
+				neighbors[0] = nullCell;
+				neighbors[3] = nullCell;
+				neighbors[5] = nullCell;				
+			} else if (y == world.previous[0].length - 1) {
+				neighbors[2] = nullCell;
+				neighbors[4] = nullCell;
+				neighbors[7] = nullCell;								
+			}
+		}
 	}
 
 	private int living() {
 		int count = 0;
 
-		for (int i = 0; i < NEIGHBORS.length; i++) {
-			if (NEIGHBORS[i].isLiving()) {
+		for (int i = 0; i < neighbors.length; i++) {
+			if (neighbors[i].isLiving()) {
 				count++;
 			}
 		}
@@ -149,12 +181,12 @@ public class Cell {
 		int rSum = 0, gSum = 0, bSum = 0;
 
 		int c, r, g, b;
-		
-		for (int i = 0; i < NEIGHBORS.length; i++) {
-			if (!NEIGHBORS[i].isLiving()) {
+
+		for (int i = 0; i < neighbors.length; i++) {
+			if (!neighbors[i].isLiving()) {
 				continue;
 			}
-			c = NEIGHBORS[i].getColor();
+			c = neighbors[i].getColor();
 			r = Color.red(c);
 			g = Color.green(c);
 			b = Color.blue(c);

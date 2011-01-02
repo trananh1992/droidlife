@@ -68,9 +68,9 @@ public class RLEWriter extends SeedWriter {
 	}
 
 	private int getStartX(World world) {
-		for (int i = 0; i < world.cells.length; i++) {
-			for (int j = 0; j < world.cells[i].length; j++) {
-				if (world.cells[i][j].isLiving()) {
+		for (int i = 0; i < world.current.length; i++) {
+			for (int j = 0; j < world.current[i].length; j++) {
+				if (world.current[i][j].isLiving()) {
 					return i;
 				}
 			}
@@ -79,9 +79,9 @@ public class RLEWriter extends SeedWriter {
 	}
 
 	private int getStartY(World world) {
-		for (int j = 0; j < world.cells[0].length; j++) {
-			for (int i = 0; i < world.cells.length; i++) {
-				if (world.cells[i][j].isLiving()) {
+		for (int j = 0; j < world.current[0].length; j++) {
+			for (int i = 0; i < world.current.length; i++) {
+				if (world.current[i][j].isLiving()) {
 					return j;
 				}
 			}
@@ -90,9 +90,9 @@ public class RLEWriter extends SeedWriter {
 	}
 
 	private int getEndX(World world) {
-		for (int i = world.cells.length - 1; i >= 0; i--) {
-			for (int j = 0; j < world.cells[i].length; j++) {
-				if (world.cells[i][j].isLiving()) {
+		for (int i = world.current.length - 1; i >= 0; i--) {
+			for (int j = 0; j < world.current[i].length; j++) {
+				if (world.current[i][j].isLiving()) {
 					return i;
 				}
 			}
@@ -101,9 +101,9 @@ public class RLEWriter extends SeedWriter {
 	}
 
 	private int getEndY(World world) {
-		for (int j = world.cells[0].length - 1; j >= 0; j--) {
-			for (int i = 0; i < world.cells.length; i++) {
-				if (world.cells[i][j].isLiving()) {
+		for (int j = world.current[0].length - 1; j >= 0; j--) {
+			for (int i = 0; i < world.current.length; i++) {
+				if (world.current[i][j].isLiving()) {
 					return j;
 				}
 			}

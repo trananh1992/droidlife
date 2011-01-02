@@ -1,6 +1,5 @@
 package org.jtb.droidlife;
 
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,27 +12,35 @@ public class World {
 	private static final Pattern RULE2_PATTERN = Pattern
 			.compile("(\\d+)/(\\d+)");
 
-	Cell[][] cells;
-	private Cell[] current;
-	private Cell[] previous;
-	private int[] birthNeighbors;
-	private int[] surviveNeighbors;
+	Cell[][] current;
+	Cell[][] previous;
+	int[] birthNeighbors;
+	int[] surviveNeighbors;
+
 	private int generation = 0;
 	private int population = 0;
 	private int cellSize;
+	private boolean wrap;
 
 	public void clear() {
-		for (int i = 0; i < cells.length; i++) {
-			for (int j = 0; j < cells[i].length; j++) {
-				cells[i][j].die();
+		for (int i = 0; i < current.length; i++) {
+			for (int j = 0; j < current[i].length; j++) {
+				current[i][j].die();
 			}
 		}
 	}
 
 	private void init() {
-		for (int i = 0; i < cells.length; i++) {
-			for (int j = 0; j < cells[i].length; j++) {
-				cells[i][j] = new Cell(this, i, j, cellSize);
+		for (int i = 0; i < current.length; i++) {
+			for (int j = 0; j < current[i].length; j++) {
+				current[i][j] = new Cell(this, i, j, cellSize, wrap);
+				previous[i][j] = new Cell(this, i, j, cellSize, wrap);
+			}
+		}
+		for (int i = 0; i < current.length; i++) {
+			for (int j = 0; j < current[i].length; j++) {
+				current[i][j].getNeighbors();
+				previous[i][j].getNeighbors();
 			}
 		}
 	}
@@ -46,58 +53,52 @@ public class World {
 		return population;
 	}
 
-	public void incPopulation() {
-		population++;
-	}
-
-	public World(int xMax, int yMax, int cellSize, int[] birthNeighbors,
-			int[] surviveNeighbors) {
+	World(int xMax, int yMax, int cellSize, int[] birthNeighbors,
+			int[] surviveNeighbors, boolean wrap) {
 		this.cellSize = cellSize;
 
-		cells = new Cell[xMax + 2][yMax + 2];
-		current = new Cell[yMax + 2];
-		previous = new Cell[yMax + 2];
+		current = new Cell[xMax][yMax];
+		previous = new Cell[xMax][yMax];
+
 		this.birthNeighbors = birthNeighbors;
 		this.surviveNeighbors = surviveNeighbors;
+		this.wrap = wrap;
 
 		init();
 	}
 
 	public void draw(Canvas canvas) {
-		for (int i = 1; i < cells.length - 1; i++) {
-			for (int j = 1; j < cells[i].length - 1; j++) {
-				cells[i][j].draw(canvas);
+		for (int i = 0; i < current.length; i++) {
+			for (int j = 0; j < current[i].length; j++) {
+				current[i][j].draw(canvas);
 			}
 		}
 	}
 
 	public void generate() {
-		copy(cells[0], previous);
+		copy(current, previous);
 
 		population = 0;
-		Cell[] tmp;
-		
-		for (int i = 1; i < cells.length - 1; i++) {
-			copy(cells[i], current);
+
+		for (int i = 0; i < current.length; i++) {
 			Cell cell;
-			for (int j = 1; j < cells[i].length - 1; j++) {
-				cell = cells[i][j];
-				cell.generate(this, current, previous, birthNeighbors, surviveNeighbors);
+			for (int j = 0; j < current[i].length; j++) {
+				cell = current[i][j];
+				cell.generate();
 				if (cell.isLiving()) {
 					population++;
 				}
 			}
-			tmp = previous;
-			previous = current;
-			current = tmp;
 		}
 
 		generation++;
 	}
 
-	private void copy(Cell[] src, Cell[] dest) {
+	private void copy(Cell[][] src, Cell[][] dest) {
 		for (int i = 0; i < src.length; i++) {
-			dest[i] = new Cell(src[i]);
+			for (int j = 0; j < src[0].length; j++) {
+				dest[i][j].init(src[i][j]);
+			}
 		}
 	}
 
@@ -119,7 +120,7 @@ public class World {
 		if (rule == null || rule.length() == 0) {
 			return;
 		}
-		
+
 		Matcher m1 = RULE1_PATTERN.matcher(rule);
 		Matcher m2 = RULE2_PATTERN.matcher(rule);
 

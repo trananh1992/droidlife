@@ -39,14 +39,14 @@ public class RLEWorldRunIterator {
 		// not a new line, run of live or dead then
 		//
 		
-		if (world.cells[xPos][yPos].isLiving()) {
+		if (world.current[xPos][yPos].isLiving()) {
 			run.type = RLERun.Type.ALIVE;
 		} else {
 			run.type = RLERun.Type.DEAD;
 		}
 		
 		while (xPos <= endX
-				&& world.cells[xPos][yPos].isLiving() == run.isLiving()) {
+				&& world.current[xPos][yPos].isLiving() == run.isLiving()) {
 			run.length++;
 			xPos++;
 			if (xPos > endX && run.type == RLERun.Type.DEAD) {
@@ -63,7 +63,7 @@ public class RLEWorldRunIterator {
 		int count = 0;
 		for (int j = lookY; j <= endY; j++) {
 			for (int i = startX; i <= endX; i++) {
-				if (world.cells[i][j].isLiving()) {
+				if (world.current[i][j].isLiving()) {
 					return count;
 				}
 			}

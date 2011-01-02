@@ -118,6 +118,10 @@ public class Prefs {
 		setInt("upgradedTo", version);
 	}
 	
+	public boolean isWrap() {
+		return getBoolean("wrap", false);
+	}
+	
 	public boolean isColored() {
 		return getBoolean("colored", true);
 	}

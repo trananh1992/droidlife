@@ -71,8 +71,8 @@ public class Life106Seeder extends FileSeeder {
 	}
 
 	private void populate(World world, boolean colored) {
-		int xmax = world.cells.length - 2;
-		int ymax = world.cells[0].length - 2;
+		int xmax = world.current.length - 1;
+		int ymax = world.current[0].length - 1;
 		int xmid = xmax / 2;
 		int ymid = ymax / 2;
 
@@ -85,9 +85,9 @@ public class Life106Seeder extends FileSeeder {
 			}
 
 			if (colored) {
-				world.cells[x][y].spawn();
+				world.current[x][y].spawn();
 			} else {
-				world.cells[x][y].spawn(Color.WHITE);
+				world.current[x][y].spawn(Color.WHITE);
 			}
 		}
 	}
