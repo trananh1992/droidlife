@@ -29,8 +29,8 @@ public class RLESeeder extends FileSeeder {
 
 	private void read(World world, boolean colored) {
 		Reader reader = null;
-		int xmax = world.cells.length - 2;
-		int ymax = world.cells[0].length - 2;
+		int xmax = world.current.length - 1;
+		int ymax = world.current[0].length - 1;
 		int xmid = xmax / 2;
 		int ymid = ymax / 2;
 
@@ -97,14 +97,14 @@ public class RLESeeder extends FileSeeder {
 		}
 
 		for (int i = x; i < x + run.length; i++) {
-			if (i < 1 || i > world.cells.length - 2 || y < 1
-					|| y > world.cells[0].length - 2) {
+			if (i < 1 || i > world.current.length - 2 || y < 1
+					|| y > world.current[0].length - 2) {
 				continue;
 			}
 			if (colored) {
-				world.cells[i][y].spawn();
+				world.current[i][y].spawn();
 			} else {
-				world.cells[i][y].spawn(Color.WHITE);
+				world.current[i][y].spawn(Color.WHITE);
 			}
 		}
 	}

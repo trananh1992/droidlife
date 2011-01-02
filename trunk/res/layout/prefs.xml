@@ -8,6 +8,9 @@
 	<CheckBoxPreference android:title="Color Cells?"
 		android:summary="Use random birth color, and factor color into births?"
 		android:key="colored" android:defaultValue="true"/>
+	<CheckBoxPreference android:title="Wrap Surface?"
+		android:summary="Wrap surface around in X and Y directions?"
+		android:key="wrap" android:defaultValue="false"/>
 	<EditTextPreference android:title="Birth Rule"
 		android:summary="String of digits, 1-8. Each digit indicates a # of neighbors resulting in a birth."
 		android:key="birthRule" android:defaultValue="3"/>

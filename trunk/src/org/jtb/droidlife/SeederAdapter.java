@@ -21,8 +21,12 @@ public class SeederAdapter extends ArrayAdapter<Seeder> {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
+		View view = convertView;
+		if (view == null) {
+			view = inflater.inflate(R.layout.seeder_row, null);			
+		}
+		
 		Seeder seeder = mSeeders.get(position);
-		View view = inflater.inflate(R.layout.seeder_row, null);
 
 		TextView nameText = (TextView) view.findViewById(R.id.name_text);
 		nameText.setText(seeder.toString());

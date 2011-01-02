@@ -83,10 +83,10 @@ class DesignView extends SurfaceView implements Seedable {
 		int[] surviveNeighbors = prefs.getSurvivalRule();
 
 		mWorld = new World(mCanvasWidth / mCellSize, mCanvasHeight / mCellSize,
-				mCellSize, birthNeighbors, surviveNeighbors);
+				mCellSize, birthNeighbors, surviveNeighbors, prefs.isWrap());
 
-		mXMax = mWorld.cells.length - 2;
-		mYMax = mWorld.cells[0].length - 2;
+		mXMax = mWorld.current.length - 2;
+		mYMax = mWorld.current[0].length - 2;
 		mXMid = mXMax / 2;
 		mYMid = mYMax / 2;
 		mX = mXMid;
@@ -100,14 +100,14 @@ class DesignView extends SurfaceView implements Seedable {
 	}
 
 	public boolean isLiving() {
-		return mWorld.cells[mX][mY].isLiving();
+		return mWorld.current[mX][mY].isLiving();
 	}
 
 	public void toggle() {
-		if (mWorld.cells[mX][mY].isLiving()) {
-			mWorld.cells[mX][mY].die();
+		if (mWorld.current[mX][mY].isLiving()) {
+			mWorld.current[mX][mY].die();
 		} else {
-			mWorld.cells[mX][mY].spawn(Color.WHITE);
+			mWorld.current[mX][mY].spawn(Color.WHITE);
 		}
 		draw();
 	}
@@ -175,7 +175,7 @@ class DesignView extends SurfaceView implements Seedable {
 	}
 
 	public void die() {
-		mWorld.cells[mX][mY].die();
+		mWorld.current[mX][mY].die();
 		draw();
 	}
 

@@ -1,9 +1,5 @@
 package org.jtb.droidlife;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.Reader;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -23,7 +19,6 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class GameActivity extends Activity implements
 		OnSharedPreferenceChangeListener, SurfaceHolder.Callback {

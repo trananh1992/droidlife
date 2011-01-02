@@ -18,15 +18,12 @@ import android.widget.TextView;
 
 class GameView extends SurfaceView implements Seedable {
 	private class GameThread extends Thread {
-		private Handler mHandler;
 		private boolean mRun = false;
-		private SurfaceHolder mSurfaceHolder;
 
 		public GameThread(SurfaceHolder surfaceHolder, Context context,
 				Handler handler) {
 
 			mSurfaceHolder = surfaceHolder;
-			mHandler = handler;
 			mContext = context;
 		}
 
@@ -127,7 +124,7 @@ class GameView extends SurfaceView implements Seedable {
 		int[] birthNeighbors = prefs.getBirthRule();
 		int[] surviveNeighbors = prefs.getSurvivalRule();
 		mWorld = new World(mCanvasWidth / cellSize, mCanvasHeight / cellSize,
-				cellSize, birthNeighbors, surviveNeighbors);
+				cellSize, birthNeighbors, surviveNeighbors, prefs.isWrap());
 		mActivityHandler.sendMessage(mActivityHandler.obtainMessage(
 				GameActivity.UPDATE_NAME_WHAT, seeder.getName()));
 		seeder.seed(mWorld, prefs.isColored());
