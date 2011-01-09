@@ -1,26 +1,15 @@
 package org.jtb.droidlife;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
-
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Handler;
-import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.TextView;
 
 class DesignView extends SurfaceView implements Seedable {
 	
@@ -85,8 +74,8 @@ class DesignView extends SurfaceView implements Seedable {
 		mWorld = new World(mCanvasWidth / mCellSize, mCanvasHeight / mCellSize,
 				mCellSize, birthNeighbors, surviveNeighbors, prefs.isWrap());
 
-		mXMax = mWorld.current.length - 2;
-		mYMax = mWorld.current[0].length - 2;
+		mXMax = mWorld.current.length - 1;
+		mYMax = mWorld.current[0].length - 1;
 		mXMid = mXMax / 2;
 		mYMid = mYMax / 2;
 		mX = mXMid;
