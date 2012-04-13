@@ -1,5 +1,7 @@
 package org.jtb.droidlife;
 
+import org.jtb.droidlife.model.World;
+
 import android.content.Context;
 import android.graphics.Color;
 

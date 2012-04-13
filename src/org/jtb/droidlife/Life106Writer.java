@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Date;
 
+import org.jtb.droidlife.model.World;
+
 public class Life106Writer extends SeedWriter {
 	@Override
 	public void write(World world, String name, Writer os) throws IOException {

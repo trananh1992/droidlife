@@ -1,5 +1,10 @@
 package org.jtb.droidlife;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
+import org.jtb.droidlife.model.World;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,8 +23,11 @@ import android.widget.TextView;
 
 class GameView extends SurfaceView implements Seedable {
 	private class GameThread extends Thread {
+		private static final long UPDATE_DELAY = 500;
+		
 		private boolean mRun = false;
-
+		private long lastUpdate = -1;
+		
 		public GameThread(SurfaceHolder surfaceHolder, Context context,
 				Handler handler) {
 
@@ -34,6 +42,12 @@ class GameView extends SurfaceView implements Seedable {
 				mWorld.generate();
 				draw();
 
+				long now = System.currentTimeMillis();
+				if (now < lastUpdate + UPDATE_DELAY) {
+					continue;
+				}
+				
+				lastUpdate = now;
 				mActivityHandler.sendMessage(mActivityHandler.obtainMessage(
 						GameActivity.UPDATE_GEN_WHAT, mWorld.getGeneration()));
 				mActivityHandler.sendMessage(mActivityHandler.obtainMessage(
@@ -45,12 +59,10 @@ class GameView extends SurfaceView implements Seedable {
 		public void setRunning(boolean b) {
 			mRun = b;
 		}
-
-		public boolean isRunning() {
-			return mRun;
-		}
 	}
 
+	private static final Executor EX = Executors.newSingleThreadExecutor();
+	
 	private Context mContext;
 	private GameThread thread;
 	private int mCanvasWidth;
@@ -127,8 +139,14 @@ class GameView extends SurfaceView implements Seedable {
 				cellSize, birthNeighbors, surviveNeighbors, prefs.isWrap());
 		mActivityHandler.sendMessage(mActivityHandler.obtainMessage(
 				GameActivity.UPDATE_NAME_WHAT, seeder.getName()));
-		seeder.seed(mWorld, prefs.isColored());
-		refresh();
+		
+		
+		EX.execute(new Runnable() {
+			@Override
+			public void run() {
+				mSeeder.seed(mWorld, prefs.isColored());
+				refresh();
+			}});
 	}
 
 	public void step() {
@@ -141,9 +159,7 @@ class GameView extends SurfaceView implements Seedable {
 		try {
 			c = mSurfaceHolder.lockCanvas(null);
 			if (c == null) {
-				Log
-						.w(getClass().getSimpleName(),
-								"canvas is not ready to draw");
+				Log.w(getClass().getSimpleName(), "canvas is not ready to draw");
 				return;
 			}
 			synchronized (mSurfaceHolder) {

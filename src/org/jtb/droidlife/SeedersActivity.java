@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -89,15 +90,22 @@ public class SeedersActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
+		MenuItem mi;
 
-		menu.add(0, MENU_NEW, 0, R.string.menu_new).setIcon(
+		mi = menu.add(0, MENU_NEW, 0, R.string.menu_new).setIcon(
 				android.R.drawable.ic_menu_add);
-		menu.add(0, MENU_PREFS, 0, R.string.menu_prefs).setIcon(
+		MenuItemCompat.setShowAsAction(mi,
+				MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
+		mi = menu.add(0, MENU_PREFS, 0, R.string.menu_prefs).setIcon(
 				android.R.drawable.ic_menu_preferences);
-		menu.add(0, MENU_HELP, 0, R.string.menu_help).setIcon(
+		MenuItemCompat.setShowAsAction(mi,
+				MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
+		mi = menu.add(0, MENU_HELP, 0, R.string.menu_help).setIcon(
 				android.R.drawable.ic_menu_help);
-		menu.add(0, MENU_INFO, 0, R.string.menu_info).setIcon(
+		MenuItemCompat.setShowAsAction(mi, MenuItemCompat.SHOW_AS_ACTION_NEVER);
+		mi = menu.add(0, MENU_INFO, 0, R.string.menu_info).setIcon(
 				android.R.drawable.ic_menu_info_details);
+		MenuItemCompat.setShowAsAction(mi, MenuItemCompat.SHOW_AS_ACTION_NEVER);
 
 		return result;
 	}

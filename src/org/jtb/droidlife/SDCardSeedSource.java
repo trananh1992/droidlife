@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 
+import org.jtb.droidlife.model.World;
+
 import android.os.Environment;
 import android.util.Log;
 

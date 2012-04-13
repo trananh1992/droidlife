@@ -1,5 +1,7 @@
 package org.jtb.droidlife;
 
+import org.jtb.droidlife.model.World;
+
 public class RLEWorldRunIterator {
 	private World world;
 	private int startX, endX, endY;

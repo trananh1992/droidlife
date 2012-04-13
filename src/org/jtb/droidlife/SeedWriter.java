@@ -5,6 +5,8 @@ import java.io.Writer;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+import org.jtb.droidlife.model.World;
+
 public abstract class SeedWriter {
 	protected static final DateFormat DATE_FORMAT = new SimpleDateFormat("d MMMM yyyy HH:mm:ss Z");
 

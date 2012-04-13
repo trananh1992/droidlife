@@ -2,6 +2,8 @@ package org.jtb.droidlife;
 
 import java.util.Random;
 
+import org.jtb.droidlife.model.World;
+
 import android.content.Context;
 
 public abstract class Seeder implements Comparable<Seeder> {

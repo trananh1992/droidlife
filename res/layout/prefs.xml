@@ -1,24 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-	<ListPreference android:title="Grid Size"
-		android:summary="Larger grids increase time to compute generations."
-		android:key="cellSize" android:defaultValue="5"
-		android:entries="@array/size_entries"
-		android:entryValues="@array/size_values" />
-	<CheckBoxPreference android:title="Color Cells?"
-		android:summary="Use random birth color, and factor color into births?"
-		android:key="colored" android:defaultValue="true"/>
-	<CheckBoxPreference android:title="Wrap Surface?"
-		android:summary="Wrap surface around in X and Y directions?"
-		android:key="wrap" android:defaultValue="false"/>
-	<EditTextPreference android:title="Birth Rule"
-		android:summary="String of digits, 1-8. Each digit indicates a # of neighbors resulting in a birth."
-		android:key="birthRule" android:defaultValue="3"/>
-	<EditTextPreference android:title="Survival Rule"
-		android:summary="String of digits, 1-8. Each digit indicates a # of neighbors resulting in survival."
-		android:key="survivalRule" android:defaultValue="23"/>
-	<CheckBoxPreference android:title="Keep Screen On?"
-		android:summary="Keep screen on and run simulation indefinitely?"
-		android:key="keepScreenOn" android:defaultValue="true"/>
-</PreferenceScreen>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    <ListPreference
+        android:defaultValue="5"
+        android:entries="@array/size_entries"
+        android:entryValues="@array/size_values"
+        android:key="cellSize"
+        android:summary="Larger grids increase time to compute generations."
+        android:title="Grid Size" />
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="colored"
+        android:summary="Use random birth color, and factor color into births?"
+        android:title="Color Cells?" />
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="wrap"
+        android:summary="Wrap surface around in X and Y directions?"
+        android:title="Wrap Surface?" />
+
+    <EditTextPreference
+        android:defaultValue="3"
+        android:inputType="number"
+        android:key="birthRule"
+        android:summary="String of digits, 1-8. Each digit indicates a # of neighbors resulting in a birth."
+        android:title="Birth Rule" />
+
+    <EditTextPreference
+        android:defaultValue="23"
+        android:inputType="number"
+        android:key="survivalRule"
+        android:summary="String of digits, 1-8. Each digit indicates a # of neighbors resulting in survival."
+        android:title="Survival Rule" />
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="keepScreenOn"
+        android:summary="Keep screen on and run simulation indefinitely?"
+        android:title="Keep Screen On?" />
+
+</PreferenceScreen>
