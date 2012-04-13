@@ -9,6 +9,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 
+import org.jtb.droidlife.model.World;
+
 import android.graphics.Color;
 import android.util.Log;
 

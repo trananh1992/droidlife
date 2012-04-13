@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.jtb.droidlife.model.World;
+
 import android.graphics.Color;
 import android.util.Log;
 

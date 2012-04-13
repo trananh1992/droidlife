@@ -1,4 +1,4 @@
-package org.jtb.droidlife;
+package org.jtb.droidlife.model;
 
 import java.util.Random;
 
@@ -17,12 +17,13 @@ public class Cell {
 	}
 
 	private Cell[] neighbors = new Cell[8];
-	private int age = -1;
 	private int x, y, size, cX, cY, radius;
 	private World world;
 	private int color = Color.WHITE;
 	private boolean wrap;
 	private Cell nullCell;
+
+	int age = -1;
 
 	private Cell() {
 	}
@@ -59,10 +60,6 @@ public class Cell {
 		return age;
 	}
 
-	public boolean isLiving() {
-		return age != -1;
-	}
-
 	public void spawn() {
 		age = 0;
 
@@ -87,7 +84,7 @@ public class Cell {
 	}
 
 	public void draw(Canvas canvas) {
-		if (!isLiving()) {
+		if (age == -1) {
 			return;
 		}
 		CIRCLE_PAINT.setColor(color);
@@ -95,13 +92,13 @@ public class Cell {
 	}
 
 	public void generate() {
-		if (isLiving()) {
+		if (age != -1) {
 			age++;
 		}
 
 		int count = living();
 
-		if (isLiving()) {
+		if (age != -1) {
 			boolean survive = false;
 			for (int k = 0; k < world.surviveNeighbors.length; k++) {
 				if (count == world.surviveNeighbors[k]) {
@@ -165,11 +162,15 @@ public class Cell {
 		}
 	}
 
+	public boolean isLiving() {
+		return age != -1;
+	}
+	
 	private int living() {
 		int count = 0;
 
-		for (int i = 0; i < neighbors.length; i++) {
-			if (neighbors[i].isLiving()) {
+		for (int i = 0, l = neighbors.length; i < l; i++) {
+			if (neighbors[i].age != -1) {
 				count++;
 			}
 		}
@@ -183,7 +184,7 @@ public class Cell {
 		int c, r, g, b;
 
 		for (int i = 0; i < neighbors.length; i++) {
-			if (!neighbors[i].isLiving()) {
+			if (neighbors[i].age == -1) {
 				continue;
 			}
 			c = neighbors[i].getColor();

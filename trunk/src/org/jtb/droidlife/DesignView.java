@@ -1,5 +1,7 @@
 package org.jtb.droidlife;
 
+import org.jtb.droidlife.model.World;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -12,7 +14,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 class DesignView extends SurfaceView implements Seedable {
-	
+
 	private static Paint POINT_PAINT = new Paint();
 	private static Paint XY_PAINT = new Paint();
 
@@ -38,7 +40,7 @@ class DesignView extends SurfaceView implements Seedable {
 	private int mXMid, mYMid;
 	private int mXMax, mYMax;
 	private Seeder mSeeder;
-	
+
 	public DesignView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
@@ -67,7 +69,7 @@ class DesignView extends SurfaceView implements Seedable {
 
 	public void seed(Seeder seeder) {
 		mSeeder = seeder;
-		
+
 		int[] birthNeighbors = prefs.getBirthRule();
 		int[] surviveNeighbors = prefs.getSurvivalRule();
 
@@ -84,7 +86,7 @@ class DesignView extends SurfaceView implements Seedable {
 		if (mSeeder != null) {
 			mSeeder.seed(mWorld, false);
 		}
-		
+
 		draw();
 	}
 
@@ -132,13 +134,14 @@ class DesignView extends SurfaceView implements Seedable {
 	public void refresh() {
 		draw();
 	}
-	
+
 	private void draw() {
 		Canvas c = null;
 		try {
 			c = mSurfaceHolder.lockCanvas(null);
 			if (c == null) {
-				Log.w(getClass().getSimpleName(), "tried to draw with null canvas");
+				Log.w(getClass().getSimpleName(),
+						"tried to draw with null canvas");
 				return;
 			}
 			synchronized (mSurfaceHolder) {
@@ -157,9 +160,9 @@ class DesignView extends SurfaceView implements Seedable {
 		int y = mY - mYMid;
 
 		mActivityHandler.sendMessage(mActivityHandler.obtainMessage(
-				DesignActivity.UPDATE_X_WHAT, new Integer(x)));
+				DesignActivity.UPDATE_X_WHAT, Integer.valueOf(x)));
 		mActivityHandler.sendMessage(mActivityHandler.obtainMessage(
-				DesignActivity.UPDATE_Y_WHAT, new Integer(y)));
+				DesignActivity.UPDATE_Y_WHAT, Integer.valueOf(y)));
 
 	}
 
@@ -197,7 +200,7 @@ class DesignView extends SurfaceView implements Seedable {
 
 	public String save(String name) {
 		SeedSource ss;
-		
+
 		if (mSeeder == null) {
 			ss = SeedSource.DEFAULT_WRITABLE;
 		} else if (!mSeeder.getSeedSource().isWritable()) {
@@ -205,15 +208,15 @@ class DesignView extends SurfaceView implements Seedable {
 		} else {
 			ss = mSeeder.getSeedSource();
 		}
-		
+
 		if (!ss.isWritable()) {
 			throw new AssertionError("seed is not writable");
 		}
 
 		ss.writeSeed(name, mWorld);
 		SeederManager.getInstance(mContext).refresh();
-		
+
 		return name;
 	}
-	
+
 }

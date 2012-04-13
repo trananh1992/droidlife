@@ -7,15 +7,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v4.view.MenuItemCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SurfaceHolder;
-import android.view.Window;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -71,11 +74,11 @@ public class GameActivity extends Activity implements
 				break;
 			case UPDATE_GEN_WHAT:
 				int gen = (Integer) msg.obj;
-				mGenText.setText("Gen: " + gen);
+				mGenText.setText(String.format("Gen: %06d", gen));
 				break;
 			case UPDATE_POP_WHAT:
 				int pop = (Integer) msg.obj;
-				mPopText.setText("Pop: " + pop);
+				mPopText.setText(String.format("Pop: %04d", pop));
 				break;
 			case UPDATE_STATUS_WHAT:
 				boolean playing = (Boolean) msg.obj;
@@ -84,6 +87,7 @@ public class GameActivity extends Activity implements
 				} else {
 					mStatusImage.setImageResource(R.drawable.pause);
 				}
+				setMenu();
 				break;
 			}
 		}
@@ -93,25 +97,46 @@ public class GameActivity extends Activity implements
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		mMenu = menu;
-
-		menu.add(0, MENU_RESEED, 0, R.string.menu_reseed).setIcon(
-				android.R.drawable.ic_menu_share);
-		menu.add(0, MENU_EDIT, 0, R.string.menu_edit).setIcon(
-				android.R.drawable.ic_menu_edit);
-		menu.add(1, MENU_PLAY, 2, R.string.menu_play).setIcon(
+		MenuItem mi;
+		
+		mi = menu.add(1, MENU_PLAY, 0, R.string.menu_play).setIcon(
 				android.R.drawable.ic_media_play);
-		menu.add(2, MENU_PAUSE, 3, R.string.menu_pause).setIcon(
-				android.R.drawable.ic_media_pause);
-		menu.add(3, MENU_HELP, 5, R.string.menu_help).setIcon(
-				android.R.drawable.ic_menu_help);
-		menu.add(3, MENU_INFO, 5, R.string.menu_info).setIcon(
-				android.R.drawable.ic_menu_info_details);
+		MenuItemCompat.setShowAsAction(mi,
+				MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
 
+		mi = menu.add(2, MENU_PAUSE, 1, R.string.menu_pause).setIcon(
+				android.R.drawable.ic_media_pause);
+		MenuItemCompat.setShowAsAction(mi,
+				MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
+		
+		mi = menu.add(3, MENU_RESEED, 2, R.string.menu_reseed).setIcon(
+				android.R.drawable.ic_menu_share);
+		MenuItemCompat.setShowAsAction(mi,
+				MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
+
+		mi = menu.add(0, MENU_EDIT, 3, R.string.menu_edit).setIcon(
+				android.R.drawable.ic_menu_edit);
+		MenuItemCompat.setShowAsAction(mi,
+				MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
+
+		mi = menu.add(3, MENU_HELP, 4, R.string.menu_help).setIcon(
+				android.R.drawable.ic_menu_help);
+		MenuItemCompat.setShowAsAction(mi,
+				MenuItemCompat.SHOW_AS_ACTION_NEVER);
+
+		mi = menu.add(3, MENU_INFO, 5, R.string.menu_info).setIcon(
+				android.R.drawable.ic_menu_info_details);
+		MenuItemCompat.setShowAsAction(mi,
+				MenuItemCompat.SHOW_AS_ACTION_NEVER);
+		
 		return true;
 	}
 
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
+	private void setMenu() {
+		if (mMenu == null) {
+			return;
+		}
+		
 		if (mGameView.isRunning()) {
 			mMenu.setGroupVisible(0, false);
 			mMenu.setGroupVisible(1, false);
@@ -124,8 +149,12 @@ public class GameActivity extends Activity implements
 			mMenu.setGroupVisible(0, true);
 			mMenu.setGroupVisible(1, false);
 			mMenu.setGroupVisible(2, false);
-		}
-
+		}		
+	}
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {	
+		setMenu();
 		return true;
 	}
 
@@ -133,26 +162,30 @@ public class GameActivity extends Activity implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case MENU_PLAY:
+			//Debug.startMethodTracing("gameview");
 			mGameView.start();
-			return true;
+			break;
 		case MENU_PAUSE:
 			mGameView.stop();
-			return true;
+			//Debug.stopMethodTracing();
+			break;
 		case MENU_RESEED:
+			if (mGameView.isRunning()) {
+				mGameView.stop();
+			}
 			seed();
-			return true;
+			break;
 		case MENU_HELP:
 			showDialog(HELP_DIALOG);
-			return true;
+			break;
 		case MENU_INFO:
 			showDialog(INFO_DIALOG);
-			return true;
+			break;
 		case MENU_EDIT:
 			showDialog(GAME_EDIT_DIALOG);
-			return true;
+			break;
 		}
-
-		return false;
+		return true;
 	}
 
 	public void save(String name) {
@@ -163,13 +196,21 @@ public class GameActivity extends Activity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.game);
 
 		mGameView = (GameView) findViewById(R.id.game);
 		mGameView.setActivityHandler(mHandler);
 		mGameView.getHolder().addCallback(this);
+		mGameView.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				if (mGameView.isRunning()) {
+					mGameView.stop();
+				} else if (mGameView.isSeeded()) {
+					mGameView.start();
+				}
+			}
+		});
 
 		mTypeText = (TextView) findViewById(R.id.type_text);
 		mGenText = (TextView) findViewById(R.id.generation_text);
@@ -195,6 +236,36 @@ public class GameActivity extends Activity implements
 			Log.e(getClass().getSimpleName(), "no position passed");
 			return;
 		}
+
+		SwipeDetector sd = new SwipeDetector();
+		mGameView.setOnTouchListener(sd);
+		sd.addListener(new SwipeDetector.SwipeListener() {
+
+			@Override
+			public void onTopToBottom() {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onRightToLeft() {
+				if (mGameView.isSeeded() && !mGameView.isRunning()) {
+					mGameView.step();
+				}
+			}
+
+			@Override
+			public void onLeftToRight() {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onBottomToTop() {
+				mGameView.stop();
+				seed();
+			}
+		});
 	}
 
 	private void seed() {
@@ -247,6 +318,9 @@ public class GameActivity extends Activity implements
 				mGameView.step();
 			}
 			break;
+		case KeyEvent.KEYCODE_DPAD_UP:
+			seed();
+			break;
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -266,7 +340,7 @@ public class GameActivity extends Activity implements
 		}
 	}
 
-	public void surfaceChanged(SurfaceHolder arg0, int format, int width,
+	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
 		mGameView.setSize(width, height);
 		seed();

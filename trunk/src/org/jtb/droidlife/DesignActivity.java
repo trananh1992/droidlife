@@ -17,12 +17,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v4.view.MenuItemCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SurfaceHolder;
+import android.view.View;
 import android.view.Window;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -75,15 +78,24 @@ public class DesignActivity extends Activity implements SurfaceHolder.Callback {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		mMenu = menu;
-
-		menu.add(0, MENU_SIMULATE, 0, R.string.menu_simulate).setIcon(
+		MenuItem mi;
+		
+		mi = menu.add(0, MENU_SIMULATE, 0, R.string.menu_simulate).setIcon(
 				android.R.drawable.ic_menu_share);
-		menu.add(0, MENU_CLEAR, 0, R.string.menu_clear).setIcon(
+		MenuItemCompat.setShowAsAction(mi,
+				MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
+		mi = menu.add(0, MENU_CLEAR, 0, R.string.menu_clear).setIcon(
 				android.R.drawable.ic_menu_close_clear_cancel);
-		menu.add(0, MENU_HELP, 0, R.string.menu_help).setIcon(
+		MenuItemCompat.setShowAsAction(mi,
+				MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
+		mi = menu.add(0, MENU_HELP, 0, R.string.menu_help).setIcon(
 				android.R.drawable.ic_menu_help);
-		menu.add(0, MENU_INFO, 0, R.string.menu_info).setIcon(
+		MenuItemCompat.setShowAsAction(mi,
+				MenuItemCompat.SHOW_AS_ACTION_NEVER);
+		mi = menu.add(0, MENU_INFO, 0, R.string.menu_info).setIcon(
 				android.R.drawable.ic_menu_info_details);
+		MenuItemCompat.setShowAsAction(mi,
+				MenuItemCompat.SHOW_AS_ACTION_NEVER);
 
 		return true;
 	}
@@ -125,13 +137,18 @@ public class DesignActivity extends Activity implements SurfaceHolder.Callback {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.design);
 
 		mDesignView = (DesignView) findViewById(R.id.design_view);
 		mDesignView.setActivityHandler(mHandler);
 		mDesignView.getHolder().addCallback(this);
+		mDesignView.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				mDesignView.toggle();
+			}
+		});
+
 		mMainLayout = (LinearLayout) findViewById(R.id.main_layout);
 		mXText = (TextView) findViewById(R.id.x_text);
 		mYText = (TextView) findViewById(R.id.y_text);
@@ -163,6 +180,31 @@ public class DesignActivity extends Activity implements SurfaceHolder.Callback {
 			}
 		}
 		mNameText.setText("Designing: " + mName);
+
+		SwipeDetector sd = new SwipeDetector();
+		mDesignView.setOnTouchListener(sd);
+		sd.addListener(new SwipeDetector.SwipeListener() {
+
+			@Override
+			public void onTopToBottom() {
+				mDesignView.moveY(1);
+			}
+
+			@Override
+			public void onRightToLeft() {
+				mDesignView.moveX(-1);
+			}
+
+			@Override
+			public void onLeftToRight() {
+				mDesignView.moveX(1);
+			}
+
+			@Override
+			public void onBottomToTop() {
+				mDesignView.moveY(-1);
+			}
+		});
 	}
 
 	@Override

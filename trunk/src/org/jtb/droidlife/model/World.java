@@ -1,4 +1,4 @@
-package org.jtb.droidlife;
+package org.jtb.droidlife.model;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,7 +12,8 @@ public class World {
 	private static final Pattern RULE2_PATTERN = Pattern
 			.compile("(\\d+)/(\\d+)");
 
-	Cell[][] current;
+	public Cell[][] current;
+
 	Cell[][] previous;
 	int[] birthNeighbors;
 	int[] surviveNeighbors;
@@ -53,7 +54,7 @@ public class World {
 		return population;
 	}
 
-	World(int xMax, int yMax, int cellSize, int[] birthNeighbors,
+	public World(int xMax, int yMax, int cellSize, int[] birthNeighbors,
 			int[] surviveNeighbors, boolean wrap) {
 		this.cellSize = cellSize;
 
@@ -68,8 +69,8 @@ public class World {
 	}
 
 	public void draw(Canvas canvas) {
-		for (int i = 0; i < current.length; i++) {
-			for (int j = 0; j < current[i].length; j++) {
+		for (int i = 0, li = current.length; i < li; i++) {
+			for (int j = 0, lj = current[i].length; j < lj; j++) {
 				current[i][j].draw(canvas);
 			}
 		}
@@ -80,12 +81,12 @@ public class World {
 
 		population = 0;
 
-		for (int i = 0; i < current.length; i++) {
+		for (int i = 0, li = current.length; i < li; i++) {
 			Cell cell;
-			for (int j = 0; j < current[i].length; j++) {
+			for (int j = 0, lj = current[i].length; j < lj; j++) {
 				cell = current[i][j];
 				cell.generate();
-				if (cell.isLiving()) {
+				if (cell.age != -1) {
 					population++;
 				}
 			}
@@ -95,8 +96,8 @@ public class World {
 	}
 
 	private void copy(Cell[][] src, Cell[][] dest) {
-		for (int i = 0; i < src.length; i++) {
-			for (int j = 0; j < src[0].length; j++) {
+		for (int i = 0, li = src.length; i < li; i++) {
+			for (int j = 0, lj = src[0].length; j < lj; j++) {
 				dest[i][j].init(src[i][j]);
 			}
 		}

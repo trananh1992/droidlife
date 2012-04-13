@@ -2,6 +2,8 @@ package org.jtb.droidlife;
 
 import java.util.ArrayList;
 
+import org.jtb.droidlife.model.World;
+
 public abstract class SeedSource {
 	public static final SeedSource DEFAULT_WRITABLE = new RLESeedSource();
 	

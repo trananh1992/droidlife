@@ -1,40 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_width="fill_parent"
-	android:id="@+id/main_layout"
-	android:layout_height="fill_parent" android:keepScreenOn="true">
+    android:id="@+id/main_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:keepScreenOn="true"
+    android:orientation="vertical" >
 
-	<LinearLayout android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:layout_weight="1"
-		android:orientation="horizontal" android:minHeight="36dp">
-		<TextView android:id="@+id/name_text" android:text="Simulating:"
-			android:gravity="left" android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:layout_weight="1" android:layout_gravity="left|center_vertical"/>
-	</LinearLayout>
-	<FrameLayout android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:layout_weight="4">
-		<org.jtb.droidlife.GameView android:id="@+id/game"
-			android:layout_gravity="top" android:layout_width="fill_parent"
-			android:layout_height="fill_parent" />
-	</FrameLayout>
-	<LinearLayout android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:layout_weight="1"
-		android:orientation="horizontal" android:minHeight="36dp">
-		<ImageView android:id="@+id/status_image"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:src="@drawable/pause" android:layout_gravity="left|center_vertical"
-			android:layout_weight="1" />
-		<TextView android:id="@+id/type_text" android:gravity="left"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:text="Type:" android:layout_gravity="left|center_horizontal"
-			android:layout_weight="3"/>
-		<TextView android:id="@+id/generation_text" android:text="Gen:"
-			android:gravity="right" android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:layout_gravity="right|center_horizontal"
-			android:layout_weight="3" />
-		<TextView android:id="@+id/population_text" android:text="Pop:"
-			android:gravity="right" android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:layout_gravity="right|center_horizontal"
-			android:layout_weight="3" />
-	</LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:minHeight="36dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/name_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="Simulating:" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="4" >
+
+        <org.jtb.droidlife.GameView
+            android:id="@+id/game"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="top" />
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:minHeight="36dp"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/status_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/pause" />
+
+        <TextView
+            android:id="@+id/type_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/status_image"
+            android:text="Type:" />
+
+        <TextView
+            android:id="@+id/population_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:text="Pop:" />
+        
+        <TextView
+            android:id="@+id/generation_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/population_text"
+            android:paddingRight="32dp"
+            android:text="Gen:" />
+
+    </RelativeLayout>
+
 </LinearLayout>
